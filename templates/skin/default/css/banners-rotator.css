@@ -1,0 +1,23 @@
+#banners_container {
+    display:block;
+    position:relative;
+    width:300px;
+    height:300px;
+    margin:0px auto 0px;
+    border:1px #CCCCCC solid;
+}
+#banner_container {
+    position:relative;
+    width:300px;
+    height:300px;
+    overflow:hidden;
+    margin:0px auto 0px;
+    }
+#banners { 
+    white-space:nowrap;
+    display:block;
+    position:relative;
+}
+#banners a img {
+    border:none;
+}

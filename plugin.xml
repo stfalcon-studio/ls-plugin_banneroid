@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>
+        <lang name="default">Banneriod</lang>
+    </name>
+    <author>
+        <lang name="default">stfalcon-studio</lang>
+    </author>
+    <homepage>http://stfalcon.com</homepage>
+    <version>0.2</version>
+    <requires>
+        <livestreet>0.4.2</livestreet>
+        <plugins>
+        </plugins>
+    </requires>
+    <description>
+        <lang name="default">Baner rotator for LS</lang>
+        <lang name="russian">Прокрутка банеров для ЛС</lang>
+        <lang name="ukrainian">Прокрутка банерів для ЛС</lang>
+    </description>
+    <delegate>
+        <module></module>
+        <action></action>
+        <template></template>
+        <entity></entity>
+    </delegate>
+</plugin>
+
