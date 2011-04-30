@@ -50,6 +50,8 @@ return array(
     'banneroid_place_top_blogs' => 'Топ блогов',
     'banneroid_side_bar' => 'Сайд бар',
     'banneroid_under_article' => 'Под статьей',
+    'banneroid_body_begin' => 'Хидер',
+    'banneroid_body_end' => 'Футер',
     'banneroid_page' => 'Страницы баннера',
     'banneroid_stats' => 'Статистика',
     'banneroid_total' => 'Статистика общая',
