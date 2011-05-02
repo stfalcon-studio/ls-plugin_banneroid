@@ -214,7 +214,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         $this->PluginBanneroid_Banner_HideBanner($sBannerId);
 
-        func_header_location('/banneroid/');
+        func_header_location(Config::Get("path.root.web").'/banneroid/');
     }
 
 }
