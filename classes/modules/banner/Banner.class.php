@@ -35,6 +35,8 @@ class PluginBanneroid_ModuleBanner extends Module {
         $this->_aPlaceNames[0] = $this->Lang_Get('banneroid_total');
         $this->_aPlaceNames[1] = $this->Lang_Get('banneroid_under_article');
         $this->_aPlaceNames[2] = $this->Lang_Get('banneroid_side_bar');
+        $this->_aPlaceNames[3] = $this->Lang_Get('banneroid_body_begin');
+        $this->_aPlaceNames[4] = $this->Lang_Get('banneroid_body_end');
     }
 
     /**
@@ -138,6 +140,8 @@ class PluginBanneroid_ModuleBanner extends Module {
 
         $aBannerPages[1] = array();
         $aBannerPages[2] = array();
+        $aBannerPages[3] = array();
+        $aBannerPages[4] = array();
 
         if (is_array($aBP) && count($aBP)) {
 
@@ -223,6 +227,40 @@ class PluginBanneroid_ModuleBanner extends Module {
     }
 
     /**
+     * Get footer banners by page url
+     * @param string $sUrl
+     * @return array
+     */
+    public function GetFooterBanners($sUrl) {
+        $aBanners = $this->_oMapper->GetBannerByParams($sUrl, 4);
+        $aList = array();
+
+        if (is_array($aBanners) && count($aBanners)) {
+            foreach ($aBanners as $aRow) {
+                $aList[] = new PluginBanneroid_ModuleBanner_EntityBanner($aRow);
+            }
+        }
+        return $aList;
+    }
+
+    /**
+     * Get header banners by page url
+     * @param string $sUrl
+     * @return array
+     */
+    public function GetHeaderBanners($sUrl) {
+        $aBanners = $this->_oMapper->GetBannerByParams($sUrl, 3);
+        $aList = array();
+
+        if (is_array($aBanners) && count($aBanners)) {
+            foreach ($aBanners as $aRow) {
+                $aList[] = new PluginBanneroid_ModuleBanner_EntityBanner($aRow);
+            }
+        }
+        return $aList;
+    }
+
+    /**
      * Get side bar banners by page url
      * @param string $sUrl
      * @return array
@@ -266,7 +304,7 @@ class PluginBanneroid_ModuleBanner extends Module {
         }
         return $aList;
     }
-
+    
     /**
      * Save banner
      * @param object $oBanner
@@ -371,6 +409,16 @@ class PluginBanneroid_ModuleBanner extends Module {
                 } else {
                     $aPages[2] = array();
                 }
+                if ($_REQUEST['banner_type'] == 3 && is_array(getRequest('banner_place')) && count(getRequest('banner_place'))) {
+                    $aPages[3] = getRequest('banner_place');
+                } else {
+                    $aPages[3] = array();
+                }
+                if ($_REQUEST['banner_type'] == 4 && is_array(getRequest('banner_place')) && count(getRequest('banner_place'))) {
+                    $aPages[4] = getRequest('banner_place');
+                } else {
+                    $aPages[4] = array();
+                }
 
                 $this->UpdateBannerPages($aPages, $oBanner);
             }
@@ -411,6 +459,14 @@ class PluginBanneroid_ModuleBanner extends Module {
 
         $aData[$this->_aPlaceNames[2]] = $this->_oMapper->GetBannerStatsbyParams(
                         array_merge($aSub, array('banner_type' => 2))
+        );
+        
+        $aData[$this->_aPlaceNames[3]] = $this->_oMapper->GetBannerStatsbyParams(
+                        array_merge($aSub, array('banner_type' => 3))
+        );
+        
+        $aData[$this->_aPlaceNames[4]] = $this->_oMapper->GetBannerStatsbyParams(
+                        array_merge($aSub, array('banner_type' => 4))
         );
 
         return $aData;

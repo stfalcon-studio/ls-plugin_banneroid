@@ -52,14 +52,13 @@ window.addEvent('load', function() {
 
         <br />
         <br />
-        <strong>{$aLang.banneroid_place_zone}</strong>
-        <br />
-
-        <label>{$aLang.banneroid_under_article} 
-            <input name="banner_type" type="radio" value="1" {if $_aRequest.banner_type==1}checked{/if} /></label>
-        <label>{$aLang.banneroid_side_bar}
-            <input name="banner_type" type="radio" value="2" {if $_aRequest.banner_type==2}checked{/if} /></label>
-
+		<fieldset style="width:500px;">
+			<legend>&nbsp;<strong>{$aLang.banneroid_place_zone}</strong></legend>
+			<label><input name="banner_type" type="radio" value="1" {if $_aRequest.banner_type==1}checked{/if} />{$aLang.banneroid_under_article}</label><br />
+			<label><input name="banner_type" type="radio" value="2" {if $_aRequest.banner_type==2}checked{/if} />{$aLang.banneroid_side_bar}</label><br />
+			<label><input name="banner_type" type="radio" value="3" {if $_aRequest.banner_type==3}checked{/if} />{$aLang.banneroid_body_begin}</label><br />
+			<label><input name="banner_type" type="radio" value="4" {if $_aRequest.banner_type==4}checked{/if} />{$aLang.banneroid_body_end}</label>
+		</fieldset>
 
 
         <br/>
