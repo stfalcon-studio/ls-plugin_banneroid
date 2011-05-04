@@ -50,25 +50,24 @@ window.addEvent('load', function() {
         <br />
 		<fieldset id="kinds" style="width:500px;">
 			<legend><strong>{$aLang.banneroid_kind}</strong><br /></legend>
-			<label><input name="banner_kind" type="radio" value="kind_image" {if $_aRequest.banner_html==''}checked{/if} />{$aLang.banneroid_kind_image}</label>
-			<label><input name="banner_kind" type="radio" value="kind_html" {if $_aRequest.banner_html}checked{/if} />{$aLang.banneroid_kind_html}</label><br />
+			<label><input name="banner_kind" type="radio" value="kind_image" {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}checked{/if} />{$aLang.banneroid_kind_image}</label>
+			<label><input name="banner_kind" type="radio" value="kind_html" {if not $_aRequest.banner_is_image || $_aRequest.banner_html!=''}checked{/if} />{$aLang.banneroid_kind_html}</label><br />
 		</fieldset>	
 		<br />
-		<div id="kind_image">	
+		<div id="kind_image" {if not $_aRequest.banner_is_image || $_aRequest.banner_html!=''}style="display:none"{/if}>	
 			<label><strong>{$aLang.banneroid_kind_image}</strong><br/>
 			<input class="w40p text" type="file" id="banner_image" name="banner_image"   /><br />
 			{if $_aRequest.banner_is_image}<img src="{$_aRequest.banner_image}" />{/if}
 			</label>
 			<br/>
         </div>
-        <div id="kind_html">
+        <div id="kind_html"  {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}style="display:none"{/if}>
 			<label>
 			<strong>{$aLang.banneroid_kind_html}</strong><br />
 			<textarea id="banner_html" name="banner_html">{$_aRequest.banner_html}</textarea>
 			</label>
 			<br/>
 		</div>
-
         <label>{$aLang.banneroid_start_date}<br/>
             <input name='banner_start_date' type='text' value='{$_aRequest.banner_start_date}' class='date demo_vista' />
         </label>
