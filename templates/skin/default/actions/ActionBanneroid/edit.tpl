@@ -73,7 +73,7 @@ window.addEvent('load', function() {
 			{foreach from=$_aRequest.banner_places item=ban_place}
 
             <tr>
-                <td>{$aLang[$ban_place.place_name]}</td>
+                <td>{if $aLang[$ban_place.place_name]}{$aLang[$ban_place.place_name]}{else}{$ban_place.place_name}{/if}</td>
                 <td class="side_bar" ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"
 	{if $aPages[$ban_place.place_id]}checked="checked"{/if} class="side_bar" /></td>
             </tr>

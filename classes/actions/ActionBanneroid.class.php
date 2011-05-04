@@ -213,8 +213,8 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $sBannerId = $this->GetParam(0);
 
         $this->PluginBanneroid_Banner_HideBanner($sBannerId);
-
-        func_header_location('/banneroid/');
+		print_r(Config::Get("router.page"));
+        //func_header_location('/banneroid/');
     }
 
 }
