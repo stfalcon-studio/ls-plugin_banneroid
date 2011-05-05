@@ -21,11 +21,18 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
      */
     function GetBannersList() {
         $sql = 'SELECT
-                        *
+                    banner.*,
+                    SUM(stats.click_count) as click_count,
+                    SUM(stats.view_count) as view_count
                 FROM
-                        ' . Config::Get('db.table.banneroid.banner') . '
+                    ' . Config::Get('db.table.banneroid.banner') . ' banner
+                LEFT JOIN
+                    ' . Config::Get('db.table.banneroid.stats') . ' stats
+                        ON banner.banner_id = stats.banner_id
                 WHERE
-                 bannes_is_show = 1
+                    banner.bannes_is_show = 1
+                GROUP BY
+                    banner.banner_id
                 ';
         return $this->oDb->select($sql);
     }
@@ -54,8 +61,9 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
      */
     public function GetBannerByParams($sUrl, $sType) {
         $sql = 'SELECT
-                    banner.*
-
+                    banner.*,
+                    SUM(stats.click_count) as click_count,
+                    SUM(stats.view_count) as view_count
                 FROM
                 ' . Config::Get('db.table.banneroid.banner') . ' banner
                     LEFT JOIN
@@ -66,9 +74,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                          ON pholder.page_id = places.place_id
                     LEFT JOIN
                             ' . Config::Get('db.table.banneroid.stats') . ' stats
-                         ON (banner.banner_id = stats.banner_id
-                             AND
-                            stats.stat_date = CURDATE())
+                         ON (banner.banner_id = stats.banner_id)
                 WHERE
                         ? LIKE places.place_url
                     AND
@@ -84,9 +90,8 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                 GROUP BY
                         banner.banner_id
                 ORDER BY
-                        stats.view_count
-                LIMIT
-                        1';
+                        view_count
+                ';
 
         return $this->oDb->select($sql, $sUrl, $sType);
     }
@@ -108,7 +113,9 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 				banner_end_date = ?,				
 				banner_type = ?d,
 				banner_is_active = ?,
-				banner_edit_date = ?
+				banner_edit_date = ?,
+                banner_click_max = ?d,
+                banner_view_max = ?d
 			WHERE
 				banner_id = ?d
 		";
@@ -124,6 +131,8 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                         $oBanner->getBannerType(),
                         $oBanner->getBannerIsActive(),
                         date("Y-m-d H:i:s"),
+                        $oBanner->getBannerClickMax(),
+                        $oBanner->getBannerViewMax(),
                         $oBanner->getId())) {
 
             return true;
@@ -149,6 +158,8 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
         $aData['banner_image'] = $oBanner->getBannerImage();
         $aData['banner_start_date'] = $oBanner->getBannerStartDate();
         $aData['banner_end_date'] = $oBanner->getBannerEndDate();
+        $aData['banner_click_max'] = $oBanner->getBannerClickMax();
+        $aData['banner_view_max'] = $oBanner->getBannerViewMax();
         $aData['banner_is_active'] = $oBanner->getBannerIsActive();
         $aData['banner_type'] = $oBanner->getBannerType();
         $aData['banner_add_date'] = date("Y-m-d H:i:s");

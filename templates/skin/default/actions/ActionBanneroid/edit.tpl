@@ -51,6 +51,17 @@ window.addEvent('load', function() {
         </label>
 
         <br />
+        <label>{$aLang.banneroid_view_max}<br/>
+            <input name="banner_view_max" type='text' value='{$_aRequest.banner_view_max}' id='banner_view_max'>
+        </label>
+        <span class="form_note">{$aLang.banneroid_max_note}</span>
+        <br />
+        <label>{$aLang.banneroid_click_max}<br/>
+            <input name="banner_click_max" type='text' value='{$_aRequest.banner_click_max}' id='banner_click_max'>
+        </label>
+        <span class="form_note">{$aLang.banneroid_max_note}</span>
+
+        <br />
         <br />
         <strong>{$aLang.banneroid_place_zone}</strong>
         <br />

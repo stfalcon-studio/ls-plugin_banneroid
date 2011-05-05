@@ -42,9 +42,9 @@ class PluginBanneroid_ModuleBanner extends Module {
      *
      * @return array
      */
-    public function GetBannersList($params=array()) {
+    public function GetBannersList() {
         $aCollection = array();
-        $aRows = $this->_oMapper->GetBannersList($params);
+        $aRows = $this->_oMapper->GetBannersList();
         if (is_array($aRows) && count($aRows)) {
             foreach ($aRows as $aRow) {
                 $oBanner = new PluginBanneroid_ModuleBanner_EntityBanner($aRow);
@@ -229,14 +229,20 @@ class PluginBanneroid_ModuleBanner extends Module {
      */
     public function GetSideBarBanners($sUrl) {
         $aBanners = $this->_oMapper->GetBannerByParams($sUrl, 2);
-        $aList = array();
-
+        $oBanner = null;
         if (is_array($aBanners) && count($aBanners)) {
             foreach ($aBanners as $aRow) {
-                $aList[] = new PluginBanneroid_ModuleBanner_EntityBanner($aRow);
+                if ($aRow['banner_click_max'] != 0 && $aRow['click_count'] >= $aRow['banner_click_max'] ) {
+                    continue;
+                } elseif ($aRow['banner_view_max'] != 0 && $aRow['view_count'] >= $aRow['banner_view_max']) {
+                    continue;
+                } else {
+                  $oBanner = new PluginBanneroid_ModuleBanner_EntityBanner($aRow);
+                  break;
+                }
             }
         }
-        return $aList;
+        return $oBanner;
     }
 
     /**
@@ -308,8 +314,19 @@ class PluginBanneroid_ModuleBanner extends Module {
                         $this->Lang_Get('banneroid_error'));
                 $bStateError = 1;
             }
+            if (!func_check((int)getRequest('banner_view_max', 0), 'float', 0, 65536)) {
+                 $this->Message_AddError(
+                        $this->Lang_Get("banneroid_error_max_view"),
+                        $this->Lang_Get('banneroid_error'));
+                $bStateError = 1;
+            }
 
-
+            if (!func_check((int)getRequest('banner_click_max', 0), 'float', 0, 65536)) {
+                 $this->Message_AddError(
+                        $this->Lang_Get("banneroid_error_max_click"),
+                        $this->Lang_Get('banneroid_error'));
+                $bStateError = 1;
+            }
 
             if ($bStateError) {
                 return false;
@@ -322,6 +339,8 @@ class PluginBanneroid_ModuleBanner extends Module {
             $oBanner->setBannerUrl($_REQUEST['banner_url']);
             $oBanner->setBannerStartDate($sStartDate);
             $oBanner->setBannerEndDate($sEndDate);
+            $oBanner->setBannerClickMax(getRequest('banner_click_max', 0));
+            $oBanner->setBannerViewMax(getRequest('banner_view_max', 0));
             $oBanner->setBannerType($_REQUEST['banner_type']);
             $oBanner->setBannerIsActive($_REQUEST['banner_is_active']);
 

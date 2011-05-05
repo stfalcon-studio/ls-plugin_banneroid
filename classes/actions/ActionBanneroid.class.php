@@ -149,6 +149,8 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $_REQUEST['banner_start_date'] = date('Y-m-d');
         $_REQUEST['banner_end_date'] = '0000-00-00';
         $_REQUEST['banner_type'] = 1;
+        $_REQUEST['banner_click_max'] = 0;
+        $_REQUEST['banner_view_max'] = 0;
         $this->SetTemplateAction('edit');
     }
 
@@ -192,6 +194,8 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $_REQUEST['banner_url'] = $oBanner->getBannerUrl();
         $_REQUEST['banner_start_date'] = $oBanner->getBannerStartDate();
         $_REQUEST['banner_end_date'] = $oBanner->getBannerEndDate();
+        $_REQUEST['banner_click_max'] = $oBanner->getBannerClickMax();
+        $_REQUEST['banner_view_max'] = $oBanner->getBannerViewMax();
         $_REQUEST['banner_is_active'] = $oBanner->getBannerIsActive();
         $_REQUEST['banner_places'] = $this->PluginBanneroid_Banner_GetAllPages();
         $_REQUEST['banner_type'] = $oBanner->getBannerType();
