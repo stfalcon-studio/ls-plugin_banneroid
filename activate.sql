@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS `prefix_banner` (
   `bannes_is_show` INT(1) unsigned NOT NULL DEFAULT '1',
   `banner_add_date` DATETIME DEFAULT NULL,
   `banner_edit_date` DATETIME DEFAULT NULL,
+  `banner_click_max` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0',
+  `banner_view_max` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0',
     PRIMARY KEY  (`banner_id`),
     KEY `banner_place_id` (`banner_is_active`),
     KEY `banner_name` (`banner_name`),

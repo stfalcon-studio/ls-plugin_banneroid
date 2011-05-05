@@ -18,16 +18,19 @@
  *
  * @return mixed
  */
-class PluginBanneroid_BlockBanneroid extends Block {
+class PluginBanneroid_BlockBanneroid extends Block
+{
 
-    public function Exec() {
-        $aBanners = $this->GetParam('aBanners');
-        $this->PluginBanneroid_ModuleBanner_AddBannerStats(array(
-            'banner_id' => $aBanners[0]->getId(),
-            'event' => 'SHOW',
-        ));
+    public function Exec()
+    {
+        if ($oBanner = $this->GetParam('oBanner')) {
+            $this->PluginBanneroid_ModuleBanner_AddBannerStats(array(
+                'banner_id' => $oBanner->getId(),
+                'event' => 'SHOW',
+            ));
 
-        $this->Viewer_Assign("oBanner", $aBanners[0]);
+            $this->Viewer_Assign("oBanner", $oBanner);
+        }
         $this->Viewer_Assign('sBannersPath', Config::Get("plugin.banneroid.images_dir"));
     }
 
