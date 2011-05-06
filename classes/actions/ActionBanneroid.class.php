@@ -148,6 +148,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $_REQUEST['banner_places'] = $this->PluginBanneroid_Banner_GetAllPages();
         $_REQUEST['banner_start_date'] = date('Y-m-d');
         $_REQUEST['banner_end_date'] = '0000-00-00';
+        $_REQUEST['banner_is_image'] = true;
         $_REQUEST['banner_type'] = 1;
         $this->SetTemplateAction('edit');
     }
