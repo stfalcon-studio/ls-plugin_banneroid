@@ -64,7 +64,6 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $this->AddEvent('stats', 'EventBannerStatistics');
         $this->AddEvent('stats-banners', 'EventBannerStatsBans');
         $this->AddEvent('add', 'EventBannerAdd');
-        $this->AddEvent('add', 'EventBannerAdd');
         $this->AddEvent('edit', 'EventBannerEdit');
         $this->AddEvent('delete', 'EventBannerDelete');
     }
@@ -180,6 +179,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         if (getRequest('submit_banner')) {
             $this->PluginBanneroid_Banner_Save($oBanner);
+            func_header_location(Config::Get("path.root.web").'/banneroid/');
         }
 
 
@@ -215,7 +215,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         $this->PluginBanneroid_Banner_HideBanner($sBannerId);
 
-        func_header_location('/banneroid/');
+        func_header_location(Config::Get("path.root.web").'/banneroid/');
     }
 
 }
