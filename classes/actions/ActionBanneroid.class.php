@@ -64,11 +64,69 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $this->AddEvent('stats', 'EventBannerStatistics');
         $this->AddEvent('stats-banners', 'EventBannerStatsBans');
         $this->AddEvent('add', 'EventBannerAdd');
-        $this->AddEvent('add', 'EventBannerAdd');
         $this->AddEvent('edit', 'EventBannerEdit');
         $this->AddEvent('delete', 'EventBannerDelete');
+        $this->AddEvent('pageadd', 'EventPageAdd');
+        $this->AddEvent('pagelist', 'EventPageList');
+        $this->AddEvent('pageedit', 'EventPageEdit');
+        $this->AddEvent('pagedelete', 'EventPageDelete');
     }
-
+    /**
+     * Add page for show banners
+     *
+     * @return void
+     */
+    protected function EventPageAdd()
+    {
+        $this->Viewer_Assign('add_page', 1);
+        $oPage = new PluginBanneroid_ModuleBanner_EntityPage();
+		$oPage -> setPlaceId(0);
+        if (getRequest('submit_page')) {
+            if ($this->PluginBanneroid_Banner_SavePage($oPage)) {
+                func_header_location('../pageedit/' . $oPage->getPlaceId());
+            }
+        }
+        $this->SetTemplateAction('pageedit');
+    }
+    /**
+     * Display pages for show banners total
+     *
+     * @return void
+     */
+    protected function EventPageList()
+    {
+        $this->Viewer_Assign('aPages', $this->PluginBanneroid_Banner_GetAllPages());
+    }
+	/**
+     * Edit page for show banners
+     *
+     * @return void
+     */
+    protected function EventPageEdit()
+    {
+        $iPlaceId = (int)$this->GetParam(0); // Id of current page 
+        
+        $oPage = $this->PluginBanneroid_Banner_GetPageById($iPlaceId);
+        if (!$oPage) {
+            return Router::Action('error');
+        }
+        if (getRequest('submit_page')) {
+            $this->PluginBanneroid_Banner_SavePage($oPage);
+        }
+        $this->Viewer_Assign('place_name', $oPage->getPlaceName());
+        $this->Viewer_Assign('place_url',  $oPage->getPlaceUrl());
+    }
+    /**
+     * Remove page for show banners
+     *
+     * @return void
+     */
+    protected function EventPageDelete()
+    {
+        $iPlaceId = (int)$this->GetParam(0); 
+        $this->PluginBanneroid_Banner_DeletePage($iPlaceId);
+        func_header_location(Config::Get("path.root.web").'/banneroid/pagelist/');
+    }
     /**
      * Display statistics total
      *
@@ -140,7 +198,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         if (getRequest('submit_banner')) {
             if ($this->PluginBanneroid_Banner_Save($oBanner)) {
-                func_header_location('../edit/' . $oBanner->getId());
+                func_header_location('../edit/' . $oBanner->getPlaceId());
             }
         }
 
@@ -213,8 +271,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $sBannerId = $this->GetParam(0);
 
         $this->PluginBanneroid_Banner_HideBanner($sBannerId);
-
-        func_header_location('/banneroid/');
+        func_header_location(Config::Get("path.root.web").'/banneroid/');
     }
 
 }

@@ -57,5 +57,5 @@ ALTER TABLE `prefix_banner_stats` ADD FOREIGN KEY ( `banner_id`) REFERENCES `pre
 ALTER TABLE `prefix_banner_stats` ADD UNIQUE `stat_date` ( `banner_id` , `stat_date`);
 
 INSERT INTO `prefix_banner_pages` (`place_id`, `place_name`, `place_url`) VALUES
-(1, 'banneroid_place_global', '%'),
-(2, 'banneroid_place_blogs', '/blog/%');
+(1, 'banneroid_page_global', '%'),
+(2, 'banneroid_page_blogs', '%/blog/%');

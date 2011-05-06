@@ -127,7 +127,23 @@ class PluginBanneroid_ModuleBanner extends Module {
     public function GetAllPages() {
         return $this->_oMapper->GetAllPages();
     }
-
+/**
+     * Get all page by id
+     *
+     * @return object|null
+     */
+    public function GetPageById($iPageId) {
+		$aRow = $this->_oMapper->GetPageById($iPageId);
+        if ($aRow) {
+            $oPage = new PluginBanneroid_ModuleBanner_EntityPage($aRow);
+            $oPage->setPageId($aRow[0]['place_id']);
+            $oPage->setPlaceName($aRow[0]['place_name']);
+            $oPage->setPlaceUrl($aRow[0]['place_url']);
+            return $oPage;
+        } else
+            return null;
+    }
+    
     /**
      * Update banners pages in DB
      *
@@ -202,7 +218,16 @@ class PluginBanneroid_ModuleBanner extends Module {
     {
        $this->_oMapper->HideBanner($sBannerId);
     }
-
+    /**
+     * Remove page (place)
+     * 
+     * @param int $iPlaceId
+     * @return void
+     */
+    public function DeletePage($iPlaceId)
+    {
+       $this->_oMapper->DeletePage($iPlaceId);
+    }
     /**
      * Return page url
      * 
@@ -266,7 +291,43 @@ class PluginBanneroid_ModuleBanner extends Module {
         }
         return $aList;
     }
-
+    /**
+     * Save banner page
+     * @param object $oPlace
+     * @return boolean
+     */    
+    function SavePage($oPage) {
+		if (isset($_REQUEST['submit_page'])) { // Update or insert page
+			$iPlaceId = $oPage->getPlaceId();
+			$bStateError = 0;
+			if (!func_check($_REQUEST['place_name'], 'text', 2, 3000)) {
+                $this->Message_AddError(
+                        $this->Lang_Get("banneroid_error_pagename"),
+                        $this->Lang_Get('banneroid_error'));
+                $bStateError = 1;
+            }
+			if (!func_check($_REQUEST['place_url'], 'text', 1, 3000)) {
+                $this->Message_AddError(
+                        $this->Lang_Get("banneroid_error_urlmask"),
+                        $this->Lang_Get('banneroid_error'));
+                $bStateError = 1;
+            }
+            
+            if ($bStateError) {
+                return false;
+            }
+            $oPage->setPlaceName($_REQUEST['place_name']);
+            $oPage->setPlaceUrl($_REQUEST['place_url']);
+            if ($iPlaceId == 0) {
+					$iRes = $this->_oMapper->AddPage($oPage);
+					$oPage->setPlaceId($iRes);
+				} else {
+					$iRes =  $this->_oMapper->UpdatePage($oPage);
+			}
+		return true;
+		}
+		return false;
+	}
     /**
      * Save banner
      * @param object $oBanner

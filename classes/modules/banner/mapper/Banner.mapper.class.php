@@ -90,7 +90,29 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 
         return $this->oDb->select($sql, $sUrl, $sType);
     }
+    /**
+     * Update place in DB
+     *
+     * @param PluginBanneroid_ModuleBanner_EntityPage $oPage
+     * @return boolean
+     */
+	public function UpdatePage(PluginBanneroid_ModuleBanner_EntityPage $oPage) {
+        $sql = "UPDATE " . Config::Get('db.table.banneroid.places') . "
+			SET
+				place_name = ?,
+				place_url = ?
+			WHERE
+				place_id = ?d
+		";
+        if ($this->oDb->query($sql,
+                        $oPage->getPlaceName(),
+                        $oPage->getPlaceUrl(),
+                        $oPage->getPlaceId())) {
 
+            return true;
+        }
+        return false;
+	}
     /**
      * Update banner in DB
      *
@@ -156,6 +178,23 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 
         return $this->oDb->query($sql, array_keys($aData), array_values($aData));
     }
+    /**
+     * Adds page into DB
+     *
+     * @param PluginBanneroid_ModuleBanner_EntityPage $oPage
+     * @return boolean
+     */
+    public function AddPage(PluginBanneroid_ModuleBanner_EntityPage $oPage) {
+        $sql = "INSERT INTO " . Config::Get('db.table.banneroid.places') . "
+                            (?#)
+		VALUES
+                            (?a)
+		";
+        $aData['place_name'] = $oPage->getPlaceName();
+        $aData['place_url'] = $oPage->getPlaceUrl();
+
+        return $this->oDb->query($sql, array_keys($aData), array_values($aData));
+    }
 
     /**
      * Select all pages from DB
@@ -170,7 +209,21 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                 ';
         return $this->oDb->select($sql);
     }
-
+    
+    /**
+     * Select pages from DB by id
+     *
+     * @return array
+     */
+    public function GetPageById($iPlaceId) {
+        $sql = 'SELECT
+                        *
+                FROM
+                        ' . Config::Get('db.table.banneroid.places') . '
+                WHERE place_id =?d ';
+                
+        return $this->oDb->select($sql, $iPlaceId);
+    }
     /**
      * Select pages linked with banner
      *
@@ -405,5 +458,15 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
         }
         return false;
     }
+    public function DeletePage($iPlaceId) {
+		$sql = "DELETE FROM " . Config::Get('db.table.banneroid.places') . "
+			WHERE
+				place_id = ?d
+		";
+		if ($this->oDb->query($sql, $iPlaceId)) {
+            return true;
+        }
+        return false;
+	}
 
 }
