@@ -42,8 +42,11 @@ window.addEvent('load', function() {
 
         <tbody>
 			{foreach from=$aBannersStats item=oStats}
-            <tr>
-                <td class="user"><a href="{router page='banneroid'}edit/{$oStats.banner_id}/" class="link">{$oStats.banner_name}</a></td>
+            <tr{if $oStats.bannes_is_show==0} style="background-color: #F8D4DB;"{/if}>
+                <td class="user">
+                  <a href="{router page='banneroid'}edit/{$oStats.banner_id}/" class="link">{$oStats.banner_name}</a>
+                  {if $oStats.bannes_is_show==0}<a href="{router page='banneroid'}restore/{$oStats.banner_id}/" style="float: right;">{$aLang.banneroid_banner_restore}</a>{/if}
+                </td>
                 <td class="user">{$oStats.click_count}</td>
                 <td class="user">{$oStats.view_count}</td>
             </tr>

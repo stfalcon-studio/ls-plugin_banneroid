@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `prefix_banner` (
   `banner_image` VARCHAR(255) DEFAULT NULL,
   `banner_html` LONGTEXT NOT NULL,
   `banner_type` INT(1) NOT NULL DEFAULT '1',
+  `banner_num` int(11) NOT NULL default '0',
   `banner_start_date` DATE DEFAULT NULL,
   `banner_end_date` DATE DEFAULT NULL,
   `banner_is_active` INT(1) unsigned NOT NULL DEFAULT '1',
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `prefix_banner` (
 CREATE TABLE IF NOT EXISTS `prefix_banner_pages` (
     `place_id` INT(5) unsigned NOT NULL auto_increment,
     `place_name` VARCHAR(50) character set UTF8 DEFAULT NULL,
+    `place_title` varchar(255) NOT NULL,
     `place_url` VARCHAR(255) character set UTF8 DEFAULT NULL,
     PRIMARY KEY  (`place_id`),
     KEY `place_name` (`place_name`),
@@ -58,4 +60,8 @@ ALTER TABLE `prefix_banner_stats` ADD UNIQUE `stat_date` ( `banner_id` , `stat_d
 
 INSERT INTO `prefix_banner_pages` (`place_id`, `place_name`, `place_url`) VALUES
 (1, 'banneroid_place_global', '%'),
-(2, 'banneroid_place_blogs', '/blog/%');
+(2, 'banneroid_place_blogs', '%/blog/%');
+
+
+ALTER TABLE `prefix_banner` ADD `banner_num` INT( 0 ) DEFAULT '0' NOT NULL AFTER `banner_type` ;
+ALTER TABLE `prefix_banner_pages` ADD `place_title` VARCHAR( 255 ) NOT NULL AFTER `place_name` ;

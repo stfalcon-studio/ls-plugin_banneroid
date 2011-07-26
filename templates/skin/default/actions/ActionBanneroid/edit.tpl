@@ -7,17 +7,129 @@
 
 <script>
 {literal}
+    function DellPlace(sId) {
+
+      JsHttpRequest.query(
+       aRouter['banneroid']+'ajaxdellplace/',
+    			{ sId:sId, security_ls_key: LIVESTREET_SECURITY_KEY  },
+    			function(result, errors) {
+            if (!result) {
+    					msgErrorBox.alert('Error','Please try again later');
+    				}
+    				if (result.bStateError) {
+    					msgErrorBox.alert(result.sMsgTitle,result.sMsg);
+    				} else {
+    					msgNoticeBox.alert(result.sMsgTitle,result.sMsg);
+              $('tr-'+sId).dispose();
+            }
+    			},
+    			true
+    	  );
+    }
+    function AddPlace() {
+
+      var place_name = $('place_name').get('value');
+      var place_title = $('place_title').get('value');
+      var place_url = $('place_url').get('value');
+      JsHttpRequest.query(
+       aRouter['banneroid']+'ajaxaddplace/',
+    			{ place_name:place_name, place_title:place_title, place_url:place_url, security_ls_key: LIVESTREET_SECURITY_KEY  },
+    			function(result, errors) {
+            if (!result) {
+    					msgErrorBox.alert('Error','Please try again later');
+    				}
+    				if (result.bStateError) {
+    					msgErrorBox.alert(result.sMsgTitle,result.sMsg);
+    				} else {
+    					msgNoticeBox.alert(result.sMsgTitle,result.sMsg);
+
+              var newTr= new Element('tr',{'id': 'tr-'+result.sId});
+              newTr.set('html',result.sHtml);
+              var divChildren = $('place');
+              newTr.injectInside(divChildren);
+
+            }
+    			},
+    			true
+    	  );
+    }
 window.addEvent('load', function() {
-         new DatePicker('.demo_vista', { pickerClass: 'datepicker_vista', format: 'Y-m-d', minDate: '',inputOutputFormat: 'Y-m-d' });
-	
+        new DatePicker('.demo_vista', { pickerClass: 'datepicker_vista', format: 'Y-m-d', minDate: '',inputOutputFormat: 'Y-m-d' });     
+        $('kinds').getElements('input[name=banner_kind]').addEvent('change', function() { 
+				if (this.value=='kind_html') {
+					$('kind_image').setStyle('display','none');
+					$('kind_html').setStyle('display','block');
+					} else {
+						$('kind_image').setStyle('display','block');
+						$('kind_html').setStyle('display','none');
+					};
+        });
+		
+        // Submit clear
+		$('fmBanneroid').addEvent('submit',function() {
+			selected_kind = $('kinds').getElements('input[name=banner_kind]:checked').get('value'); 
+			if (selected_kind == 'kind_image') {					
+					$('banner_html').set('value','');
+				} else {
+					$('banner_image').set('value','');
+			}
+		});
 });
 {/literal}
 </script>
 <div class="page people">
+
     <form method="POST" action="" enctype="multipart/form-data" id="fmBanneroid">
         <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
         <h1><span>{if $add_banner}{$aLang.banneroid_add}{else}{$aLang.banneroid_edit}{/if}</span></h1>
+        <div style="width: 460px; float: left; padding: 10px; margin: 0 10px 10px 0; border: solid 1px #E9E8E8;">
 
+            <div>
+                <table id="place" style="width:400px" border="0">
+                    <tr>
+                        <th>{$aLang.banneroid_page}</th>
+                        <th colspan="2" class="side_bar">&nbsp;</th>
+                    </tr>
+                    <tr>
+                        <td>{$aLang.banneroid_page_td}</td>
+                        <td colspan="2">{$aLang.banneroid_url_td}</td>
+                    </tr>
+                    {foreach from=$_aRequest.banner_places item=ban_place}
+
+                        <tr id="tr-{$ban_place.place_id}">
+                            <td>{$ban_place.place_title}</td>
+                            <td>{$ban_place.place_url}</td>
+                            <td class="side_bar" ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"
+                                {if $aPages[$ban_place.place_id]}checked="checked"{/if} class="side_bar" />
+                            <a href="#" onclick="DellPlace({$ban_place.place_id}); return false;" style="color: red;">&#215;</a>
+                        </td>
+                    </tr>
+                {/foreach}
+            </table>
+            <strong>{$aLang.banneroid_new_page}</strong><br>
+            <table id="place" style="width:400px" border="0">
+
+                <tr>
+                    <td>{$aLang.banneroid_page_td}</td>
+                    <td>{$aLang.banneroid_url_td}</td>
+                    <td>{$aLang.banneroid_name_td}</td>
+                </tr>
+
+                <tr>
+                    <td><input type="text" name="place_title" id="place_title" value="" /></td>
+                    <td><input type="text" name="place_url" id="place_url" value="" /></td>
+                    <td><input type="text" name="place_name" id="place_name" value="" /></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><input type="button" value="{$aLang.banneroid_add_page}" onclick="AddPlace();" /></td>
+                </tr>
+            </table>
+            <div>{$aLang.banneroid_faq}</div>
+        </div>
+
+    </div>
+    <div style="float: left; padding: 10px; margin: 0 10px 10px 0; border: solid 1px #E9E8E8;">
+            
         <label>
 			{$aLang.banneroid_name}<br/>
             <input class="w40p text" type="text" id="banner_name" name="banner_name" value="{$_aRequest.banner_name}"  />
@@ -27,20 +139,28 @@ window.addEvent('load', function() {
 			{$aLang.banneroid_url}<br/>
             <input class="w100p text" type="text" id="banner_url" name="banner_url" value="{$_aRequest.banner_url}"  />
         </label>
-        <br/>
-        <label>
-			{$aLang.banneroid_picture}<br/>
-          <input class="w40p text" type="file" id="banner_image" name="banner_image"   /><br />
+        <br />
+        <br />
+		<fieldset id="kinds" style="width:500px;">
+			<legend><strong>{$aLang.banneroid_kind}</strong><br /></legend>
+			<label><input name="banner_kind" type="radio" value="kind_image" {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}checked{/if} />{$aLang.banneroid_kind_image}</label>
+			<label><input name="banner_kind" type="radio" value="kind_html" {if not $_aRequest.banner_is_image || $_aRequest.banner_html!=''}checked{/if} />{$aLang.banneroid_kind_html}</label><br />
+		</fieldset>	
+		<br />
+		<div id="kind_image" {if not $_aRequest.banner_is_image || $_aRequest.banner_html!=''}style="display:none"{/if}>	
+			<label><strong>{$aLang.banneroid_kind_image}</strong><br/>
+			<input class="w40p text" type="file" id="banner_image" name="banner_image"   /><br />
 			{if $_aRequest.banner_is_image}<img src="{$_aRequest.banner_image}" />{/if}
-        </label>
-        <br/>
-        <label>
-          <b>Код банера</b><br />
-          <textarea id="banner_html" name="banner_html">{$_aRequest.banner_html}</textarea>
-        </label>
-        <br/>
-
-
+			</label>
+			<br/>
+        </div>
+        <div id="kind_html"  {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}style="display:none"{/if}>
+			<label>
+			<strong>{$aLang.banneroid_kind_html}</strong><br />
+			<textarea id="banner_html" name="banner_html">{$_aRequest.banner_html}</textarea>
+			</label>
+			<br/>
+		</div>
         <label>{$aLang.banneroid_start_date}<br/>
             <input name='banner_start_date' type='text' value='{$_aRequest.banner_start_date}' class='date demo_vista' />
         </label>
@@ -52,42 +172,38 @@ window.addEvent('load', function() {
 
         <br />
         <br />
-        <strong>{$aLang.banneroid_place_zone}</strong>
-        <br />
+		<fieldset style="width:500px;">
+			<legend>&nbsp;<strong>{$aLang.banneroid_place_zone}</strong></legend>
+			<label><input name="banner_type" type="radio" value="1" {if $_aRequest.banner_type==1}checked{/if} />{$aLang.banneroid_under_article}</label><br />
+			<label><input name="banner_type" type="radio" value="2" {if $_aRequest.banner_type==2}checked{/if} />{$aLang.banneroid_side_bar}</label><br />
+			<label><input name="banner_type" type="radio" value="3" {if $_aRequest.banner_type==3}checked{/if} />{$aLang.banneroid_body_begin}</label><br />
+			<label><input name="banner_type" type="radio" value="4" {if $_aRequest.banner_type==4}checked{/if} />{$aLang.banneroid_body_end}</label>
+		</fieldset>
 
-        <label>{$aLang.banneroid_under_article} 
-            <input name="banner_type" type="radio" value="1" {if $_aRequest.banner_type==1}checked{/if} /></label>
-        <label>{$aLang.banneroid_side_bar}
-            <input name="banner_type" type="radio" value="2" {if $_aRequest.banner_type==2}checked{/if} /></label>
 
-
-
-        <br/>
-        <br />
-
-        <table style="width:500px" border="0">
-            <tr>
-                <th>{$aLang.banneroid_page}</th>
-                <th class="side_bar">&nbsp;</th>
-            </tr>
-			{foreach from=$_aRequest.banner_places item=ban_place}
-
-            <tr>
-                <td>{$aLang[$ban_place.place_name]}</td>
-                <td class="side_bar" ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"
-	{if $aPages[$ban_place.place_id]}checked="checked"{/if} class="side_bar" /></td>
-            </tr>
-  {/foreach}
-        </table>
-
-        <br />
-        <label>
-			{$aLang.banneroid_active}
-            <input name="banner_is_active" type="hidden" value="0" />
+    <br><br>
+    <strong>{$aLang.banneroid_num}</strong>
+    <div id="">
+        <select name="banner_num" id="banner_num" class="w100">
+            <option value="0"{if $_aRequest.banner_num==0} selected{/if}>0</option>
+            <option value="1"{if $_aRequest.banner_num==1} selected{/if}>1</option>
+            <option value="2"{if $_aRequest.banner_num==2} selected{/if}>2</option>
+            <option value="3"{if $_aRequest.banner_num==3} selected{/if}>3</option>
+            <option value="4"{if $_aRequest.banner_num==4} selected{/if}>4</option>
+            <option value="5"{if $_aRequest.banner_num==5} selected{/if}>5</option>
+            <option value="6"{if $_aRequest.banner_num==6} selected{/if}>6</option>
+            <option value="7"{if $_aRequest.banner_num==7} selected{/if}>7</option>
+            <option value="8"{if $_aRequest.banner_num==8} selected{/if}>8</option>
+            <option value="9"{if $_aRequest.banner_num==9} selected{/if}>9</option>
+        </select>
+    </div>
+</div>
+        <div style="clear: both;"></div>
+        <label style="border: solid 1px #ccc; padding: 5px;">
+            {$aLang.banneroid_active}
             <input name="banner_is_active" type="checkbox" value="1" {if $_aRequest.banner_is_active}checked="checked"{/if}/>
-        </label>
-        <br/>
-        <br/><br/>
+        </label><br />
+        
 
         <input type="submit" name="submit_banner" value="{$aLang.banneroid_save}" />
         <input type="submit" name="cancel" value="{$aLang.banneroid_cancel}"/>

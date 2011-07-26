@@ -14,6 +14,22 @@
 
 class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 
+    public function RestoreBanner($oBanner)
+    {
+         $sql = "UPDATE " . Config::Get('db.table.banneroid.banner') . "
+			SET
+				bannes_is_show = 1
+            WHERE
+				banner_id = ?d
+		";
+
+
+        if ($this->oDb->query($sql, $oBanner->getId())) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Select list of banners
      *
@@ -53,6 +69,10 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
      * @return  array
      */
     public function GetBannerByParams($sUrl, $sType) {
+      $sLimit = 'limit 10';
+      if ($sType == 3 or $sType == 4) $sLimit = 'limit 1';
+        $sType;
+
         $sql = 'SELECT
                     banner.*
 
@@ -76,17 +96,18 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                     AND
                         banner_is_active=1
                     AND
+                        bannes_is_show=1
+                    AND
                         banner_start_date<=CURDATE()
                     AND
                         (banner_end_date>=CURDATE() OR banner_end_date="0000-00-00")
 
 
                 GROUP BY
-                        banner.banner_id
+                        banner.banner_id,banner.banner_num
                 ORDER BY
                         stats.view_count
-                LIMIT
-                        1';
+                 '.$sLimit;
 
         return $this->oDb->select($sql, $sUrl, $sType);
     }
@@ -100,6 +121,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
     public function UpdateBanner(PluginBanneroid_ModuleBanner_EntityBanner $oBanner) {
         $sql = "UPDATE " . Config::Get('db.table.banneroid.banner') . "
 			SET
+				banner_num = ?,
 				banner_name = ?,
 				banner_html = ?,
 				banner_url = ?,
@@ -115,6 +137,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 
 
         if ($this->oDb->query($sql,
+                        $oBanner->getBannerNum(),
                         $oBanner->getName(),
                         $oBanner->getBannerHtml(),
                         $oBanner->getBannerUrl(),
@@ -143,6 +166,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 		VALUES
                             (?a)
 		";
+        $aData['banner_num'] = $oBanner->getBannerNum();
         $aData['banner_name'] = $oBanner->getName();
         $aData['banner_html'] = $oBanner->getBannerHtml();
         $aData['banner_url'] = $oBanner->getBannerUrl();
@@ -195,7 +219,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
      */
     public function GetBannerPagesNames($oBanner) {
         $sql = 'SELECT
-                        PLS.place_name,PLSH.place_type
+                        PLS.place_name,PLSH.place_type,PLS.place_title
                 FROM
                         ' . Config::Get('db.table.banneroid.places_holders') . ' PLSH
                 LEFT JOIN
@@ -366,7 +390,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
         $sql = 'SELECT bs.banner_id,
                        SUM(bs.view_count) AS view_count,
                        SUM(bs.click_count) AS click_count,
-                       banner.banner_name
+                       banner.banner_name,banner.bannes_is_show
                 FROM
                         ' . Config::Get('db.table.banneroid.stats') . ' bs
                 LEFT JOIN
@@ -394,6 +418,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
     {
          $sql = "UPDATE " . Config::Get('db.table.banneroid.banner') . "
 			SET
+				banner_is_active = 0,
 				bannes_is_show = 0
             WHERE
 				banner_id = ?d
@@ -404,6 +429,25 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
             return true;
         }
         return false;
+    }
+
+    public function AddPagePlace($aPagePlace) {
+
+        $sql = 'INSERT INTO
+                        ' . Config::Get('db.table.banneroid.places') . '
+                        (?#)
+                VALUES
+                        (?a)';
+
+        return $this->oDb->query($sql, array_keys($aPagePlace), array_values($aPagePlace));
+    }
+
+    public function DellPagePlace($sId) {
+        $sql = 'DELETE FROM
+                        ' . Config::Get('db.table.banneroid.places') . '
+                WHERE place_id = ?d';
+
+        return $this->oDb->query($sql, $sId);
     }
 
 }
