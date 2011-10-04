@@ -1,7 +1,5 @@
-{assign var="bNoSidebar" value=true}
+{assign var="noSidebar" value=true}
 {include file='header.tpl' showWhiteBack=true menu='banneroid'}
-<link rel="stylesheet" media="screen" type="text/css" href="{$sTemplateWebPathPlugin}css/datepicker_vista.css" />
-<script type="text/javascript" src="{$sTemplateWebPathPlugin}js/datepicker.js"></script>
 <script type="text/javascript" src="{$sTemplateWebPathPlugin}js/banneroid.js"></script>
 <div class="page people">
 
@@ -11,12 +9,12 @@
 
         <label>
             {$aLang.banneroid_name}<br/>
-            <input class="w100p text" type="text" id="banner_name" name="banner_name" value="{$_aRequest.banner_name}"  />
+            <input class="input-wide" type="text" id="banner_name" name="banner_name" value="{$_aRequest.banner_name}"  />
         </label>
         <br/>
         <label>
             {$aLang.banneroid_url}<br/>
-            <input class="w100p text" type="text" id="banner_url" name="banner_url" value="{$_aRequest.banner_url}"  />
+            <input class="input-wide" type="text" id="banner_url" name="banner_url" value="{$_aRequest.banner_url}"  />
         </label>
         <br />
         <br />
@@ -36,7 +34,7 @@
     <div id="kind_html"  {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}style="display:none"{/if}>
         <label>
             <strong>{$aLang.banneroid_kind_html}</strong><br />
-            <textarea id="banner_html" name="banner_html" cols="40" rows="20">{$_aRequest.banner_html}</textarea>
+            <textarea id="banner_html" name="banner_html" cols="40" rows="20" class="input-wide">{$_aRequest.banner_html}</textarea>
         </label>
         <br/>
     </div>
@@ -63,11 +61,11 @@
     <br/>
     <br />
 
-    <table style="width:500px" border="0">
+    <table class="table table-people table-talk" style="width: 500px;">
         <thead>
             <tr>
                 <td>{$aLang.banneroid_page}</td>
-                <td>&nbsp;</td>
+                <td style="width:20px;">&nbsp;</td>
             </tr>
         </thead>
         {foreach from=$_aRequest.banner_places item=ban_place}
