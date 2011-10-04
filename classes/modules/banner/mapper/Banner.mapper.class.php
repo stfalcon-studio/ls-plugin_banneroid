@@ -46,7 +46,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
     }
 
     /**
-     * Select banner by its Id
+     * Get active banners filtered by type
      *
      * @param string $sUrl
      * @param int $sType
@@ -75,6 +75,8 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                         pholder.place_type = ?d
                     AND
                         banner_is_active=1
+                    AND
+                        bannes_is_show=1
                     AND
                         banner_start_date<=CURDATE()
                     AND
@@ -105,7 +107,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 				banner_url = ?,
 				banner_image = ?,
 				banner_start_date = ?,
-				banner_end_date = ?,				
+				banner_end_date = ?,
 				banner_type = ?d,
 				banner_is_active = ?,
 				banner_edit_date = ?
@@ -244,7 +246,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 
     /**
      * Add link to page on banner
-     * 
+     *
      * @param int $sPageId
      * @param int $sPageType
      * @param PluginBanneroid_ModuleBanner_EntityBanner $oBanner
@@ -283,7 +285,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
             $sql .= 'click_count = DEFAULT(click_count) + 1,';
         }
         $sql .= 'stat_date = DATE(NOW())';
-        
+
         $this->oDb->query($sql, $aParams['banner_id']);
     }
 
@@ -323,15 +325,15 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 
     /**
      * Get banner stats items
-     * 
+     *
      * @param array $aParams
      * @return integer
      */
-    
+
     public function GetBannerStatsbyParams($aParams=array()) {
 
 
-        $sql = 'SELECT 
+        $sql = 'SELECT
                     SUM(bs.view_count) as view_count,
                     SUM(bs.click_count) as click_count
                 FROM
@@ -358,7 +360,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
      * @param array $aParams
      * @return array
      */
-    
+
     public function GetBannerStatsListbyParams($aParams=array()) {
         $sql = 'SET @clik:=0,@pred_uri=\'\' ';
         $this->oDb->query($sql);

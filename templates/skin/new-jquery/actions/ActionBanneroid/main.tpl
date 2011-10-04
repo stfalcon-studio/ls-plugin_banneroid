@@ -1,12 +1,10 @@
-{assign var="bNoSidebar" value=true}
+{assign var="noSidebar" value=true}
 {include file='header.tpl' showWhiteBack=true menu='banneroid'}
-<link rel="stylesheet" media="screen" type="text/css" href="{$sTemplateWebPathPlugin}css/datepicker_vista.css" />
-<script type="text/javascript" src="{$sTemplateWebPathPlugin}js/datepicker.js"></script>
 <script type="text/javascript" src="{$sTemplateWebPathPlugin}js/banneroid.js"></script>
 <div class="page people">
     <h1>{$aLang.banneroid_title}</h1>
     {if $aBannersList}
-        <table>
+        <table class="table table-people table-talk">
             <thead>
                 <tr>
                     <td>{$aLang.banneroid_banner}</td>
