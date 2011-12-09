@@ -27,10 +27,12 @@ class PluginBanneroid_HookBanneroid extends Hook
      */
     public function RegisterHook() {
         $this->AddHook('template_main_menu', 'InitAction', __CLASS__);
-        $this->AddHook('engine_init_complete', 'AddBannerBlock', __CLASS__, 0);
-        $this->AddHook(Config::Get('plugin.banneroid.banner_content_hook'), 'AddBannersInContent', __CLASS__, 0);
-        $this->AddHook('template_body_begin', 'AddBannersInHeader', __CLASS__, 0);
-        $this->AddHook('template_body_end', 'AddBannersInFooter', __CLASS__, 0);
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $this->AddHook('init_action', 'AddBannerBlock', __CLASS__, -100);
+            $this->AddHook(Config::Get('plugin.banneroid.banner_content_hook'), 'AddBannersInContent', __CLASS__, 0);
+            $this->AddHook('template_body_begin', 'AddBannersInHeader', __CLASS__, 0);
+            $this->AddHook('template_body_end', 'AddBannersInFooter', __CLASS__, 0);
+        }
     }
 
     /**
