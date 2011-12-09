@@ -7,7 +7,7 @@
         <lang name="default">stfalcon-studio</lang>
     </author>
     <homepage>http://stfalcon.com</homepage>
-    <version>0.2</version>
+    <version>0.3.0</version>
     <requires>
         <livestreet>0.4.2</livestreet>
         <plugins>
