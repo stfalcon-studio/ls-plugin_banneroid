@@ -63,9 +63,12 @@ class PluginBanneroid_HookBanneroid extends Hook
         if (in_array(Router::GetAction(), Config::Get('plugin.banneroid.banner_skip_actions'))) {
             return false;
         }
-        $aBanners = $this->PluginBanneroid_Banner_GetSideBarBanners($_SERVER['REQUEST_URI']);
-        if (count($aBanners)) { //Inser banner block
-            $this->Viewer_AddBlock('right', 'banneroid', array('plugin' => 'banneroid', 'aBanners' => $aBanners), Config::Get('plugin.banneroid.banner_block_order'));
+        $aBanners = $this->PluginBanneroid_Banner_GetSideBarBanners($_SERVER['REQUEST_URI'], true);
+        if (count($aBanners)) { //Insert banner block
+            $this->Viewer_AddBlock('right', 'banneroid', array(
+                'plugin'   => 'banneroid',
+                'aBanners' => $aBanners
+            ), Config::Get('plugin.banneroid.banner_block_order'));
         }
         return true;
     }
@@ -81,7 +84,7 @@ class PluginBanneroid_HookBanneroid extends Hook
             return false;
         }
         $aBanners = $this->PluginBanneroid_Banner_GetContentBanners($_SERVER['REQUEST_URI'], true);
-        if (count($aBanners)) { //Inser banner block
+        if (count($aBanners)) { //Insert banner block
             $this->Viewer_Assign("aBanners", $aBanners);
             $this->Viewer_Assign('sBannersPath', Config::Get("plugin.banneroid.images_dir"));
             return $this->Viewer_Fetch(
@@ -100,7 +103,7 @@ class PluginBanneroid_HookBanneroid extends Hook
             return false;
         }
         $aBanners = $this->PluginBanneroid_Banner_GetHeaderBanners($_SERVER['REQUEST_URI'], true);
-        if (count($aBanners)) { //Inser banner block
+        if (count($aBanners)) { //Insert banner block
             $this->Viewer_Assign("aBanners", $aBanners);
             $this->Viewer_Assign('sBannersPath', Config::Get("plugin.banneroid.images_dir"));
             return $this->Viewer_Fetch(
@@ -119,7 +122,7 @@ class PluginBanneroid_HookBanneroid extends Hook
             return false;
         }
         $aBanners = $this->PluginBanneroid_Banner_GetFooterBanners($_SERVER['REQUEST_URI'], true);
-        if (count($aBanners)) { //Inser banner block
+        if (count($aBanners)) { //Insert banner block
             $this->Viewer_Assign("aBanners", $aBanners);
             $this->Viewer_Assign('sBannersPath', Config::Get("plugin.banneroid.images_dir"));
             return $this->Viewer_Fetch(

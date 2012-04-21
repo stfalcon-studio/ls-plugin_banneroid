@@ -22,11 +22,6 @@ class PluginBanneroid_BlockBanneroid extends Block {
 
     public function Exec() {
         $aBanners = $this->GetParam('aBanners');
-        $this->PluginBanneroid_ModuleBanner_AddBannerStats(array(
-            'banner_id' => $aBanners[0]->getId(),
-            'event' => 'SHOW',
-        ));
-
         $this->Viewer_Assign("oBanner", $aBanners[0]);
         $this->Viewer_Assign('sBannersPath', Config::Get("plugin.banneroid.images_dir"));
     }
