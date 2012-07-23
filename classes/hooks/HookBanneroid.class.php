@@ -83,6 +83,7 @@ class PluginBanneroid_HookBanneroid extends Hook
         if (in_array(Router::GetAction(), Config::Get('plugin.banneroid.banner_skip_actions'))) {
             return false;
         }
+        
         $aBanners = $this->PluginBanneroid_Banner_GetContentBanners($_SERVER['REQUEST_URI'], true);
         if (count($aBanners)) { //Insert banner block
             $this->Viewer_Assign("aBanners", $aBanners);
@@ -102,6 +103,7 @@ class PluginBanneroid_HookBanneroid extends Hook
         if (in_array(Router::GetAction(), Config::Get('plugin.banneroid.banner_skip_actions'))) {
             return false;
         }
+        
         $aBanners = $this->PluginBanneroid_Banner_GetHeaderBanners($_SERVER['REQUEST_URI'], true);
         if (count($aBanners)) { //Insert banner block
             $this->Viewer_Assign("aBanners", $aBanners);
@@ -121,6 +123,7 @@ class PluginBanneroid_HookBanneroid extends Hook
         if (in_array(Router::GetAction(), Config::Get('plugin.banneroid.banner_skip_actions'))) {
             return false;
         }
+        
         $aBanners = $this->PluginBanneroid_Banner_GetFooterBanners($_SERVER['REQUEST_URI'], true);
         if (count($aBanners)) { //Insert banner block
             $this->Viewer_Assign("aBanners", $aBanners);

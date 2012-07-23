@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `prefix_banner` (
   `banner_url` VARCHAR(255) DEFAULT NULL,
   `banner_image` VARCHAR(255) DEFAULT NULL,
   `banner_html` LONGTEXT NOT NULL,
+  `banner_lang` VARCHAR(16) DEFAULT NULL,
   `banner_type` INT(1) NOT NULL DEFAULT '1',
   `banner_start_date` DATE DEFAULT NULL,
   `banner_end_date` DATE DEFAULT NULL,

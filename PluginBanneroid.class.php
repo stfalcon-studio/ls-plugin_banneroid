@@ -38,7 +38,8 @@ class PluginBanneroid extends Plugin {
         if (!file_exists($sDir)) {
             @mkdir($sDir);
             @chmod($sDir, 0777);
-        } 
+        }
+        $this->Cache_Clean();
         return true;
     }
 
@@ -58,6 +59,7 @@ class PluginBanneroid extends Plugin {
      * @return boolean
      */
     public function Deactivate() {
+        $this->Cache_Clean();
         $resutls = $this->ExportSQL(dirname(__FILE__) . '/deactivate.sql');
         return $resutls['result'];
     }
