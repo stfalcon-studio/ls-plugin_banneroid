@@ -86,7 +86,17 @@
 </label>
 <br/>
 <br/><br/>
-
+{if count($aLangs)}
+    <p>
+        <label>{$aLang.banneroid_select_lang}</label>
+        <select id="banneroid_lang" class="w100" name="banneroid_lang">
+            <option value="0"></option>
+            {foreach from=$aLangs key=sLangKey item=sLangText}
+                <option {if $_aRequest.banner_lang == $sLangKey}selected="selected"{/if}value="{$sLangKey}">{$aLang.$sLangText}</option>
+            {/foreach}
+        </select>
+    </p>
+{/if}
 <input type="submit" name="submit_banner" value="{$aLang.banneroid_save}" />
 <input type="submit" name="cancel" value="{$aLang.banneroid_cancel}"/>
 

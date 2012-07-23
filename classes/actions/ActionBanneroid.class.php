@@ -19,6 +19,8 @@
  */
 class PluginBanneroid_ActionBanneroid extends ActionPlugin
 {
+    
+    protected $aActivePlugins = array();
 
     /**
      * Action initialization
@@ -29,6 +31,8 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         if (!$this->CheckUserRights()) {
             return Router::Action('error');
         }
+        
+        $this->aActivePlugins = $this->Plugin_GetActivePlugins();
         $this->Viewer_AddHtmlTitle($this->Lang_Get('banneroid_title'));
         $this->SetDefaultEvent('main');
     }
@@ -136,7 +140,12 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
                 Router::Location('../edit/' . $oBanner->getId());
             }
         }
-
+        
+        if (in_array('l10n', $this->aActivePlugins)) {
+            $aLangs = $this->PluginL10n_L10n_GetAllowedLangsToViewer();
+            $this->Viewer_Assign('aLangs', $aLangs);
+        }
+        
         $this->Viewer_Assign('oBanner', $oBanner);
         $_REQUEST['banner_places'] = $this->PluginBanneroid_Banner_GetAllPages();
         $_REQUEST['banner_start_date'] = date('Y-m-d');
@@ -176,7 +185,12 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
             }
         }
 
-
+        
+        if (in_array('l10n', $this->aActivePlugins)) {
+            $aLangs = $this->PluginL10n_L10n_GetAllowedLangsToViewer();
+            $this->Viewer_Assign('aLangs', $aLangs);
+        }
+        
         // Setting banner page vars
 
         $this->Viewer_Assign('oBanner', $oBanner);
@@ -185,6 +199,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $_REQUEST['banner_name'] = $oBanner->getBannerName();
         $_REQUEST['banner_html'] = $oBanner->getBannerHtml();
         $_REQUEST['banner_url'] = $oBanner->getBannerUrl();
+        $_REQUEST['banner_lang'] = $oBanner->getBannerLang();
         $_REQUEST['banner_start_date'] = $oBanner->getBannerStartDate();
         $_REQUEST['banner_end_date'] = $oBanner->getBannerEndDate();
         $_REQUEST['banner_is_active'] = $oBanner->getBannerIsActive();

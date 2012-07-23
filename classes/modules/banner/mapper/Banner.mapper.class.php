@@ -52,7 +52,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
      * @param int $sType
      * @return  array
      */
-    public function GetBannerByParams($sUrl, $sType) {
+    public function GetBannerByParams($sUrl, $sType, $sLang = null) {
         $sql = 'SELECT
                     banner.*
 
@@ -80,9 +80,13 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                     AND
                         banner_start_date<=CURDATE()
                     AND
-                        (banner_end_date>=CURDATE() OR banner_end_date="0000-00-00")
-
-
+                        (banner_end_date>=CURDATE() OR banner_end_date="0000-00-00")';
+        
+        if (!is_null($sLang)) {
+            $sql .= ' AND (banner_lang = \'' . $sLang . '\' OR banner_lang IS NULL) ';
+        } 
+        
+        $sql .='
                 GROUP BY
                         banner.banner_id
                 ORDER BY
@@ -105,6 +109,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 				banner_name = ?,
 				banner_html = ?,
 				banner_url = ?,
+				banner_lang = ?,
 				banner_image = ?,
 				banner_start_date = ?,
 				banner_end_date = ?,
@@ -115,11 +120,11 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
 				banner_id = ?d
 		";
 
-
         if ($this->oDb->query($sql,
                         $oBanner->getName(),
                         $oBanner->getBannerHtml(),
                         $oBanner->getBannerUrl(),
+                        $oBanner->getBannerLang(),
                         $oBanner->getBannerImage(),
                         $oBanner->getBannerStartDate(),
                         $oBanner->getBannerEndDate(),
@@ -148,6 +153,7 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
         $aData['banner_name'] = $oBanner->getName();
         $aData['banner_html'] = $oBanner->getBannerHtml();
         $aData['banner_url'] = $oBanner->getBannerUrl();
+        $aData['banner_lang'] = $oBanner->getBannerLang();
         $aData['banner_image'] = $oBanner->getBannerImage();
         $aData['banner_start_date'] = $oBanner->getBannerStartDate();
         $aData['banner_end_date'] = $oBanner->getBannerEndDate();

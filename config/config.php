@@ -24,7 +24,7 @@ Config::Set('plugin.banneroid.images_dir', Config::Get('path.root.web') . Config
 Config::Set('plugin.banneroid.max_year', 5);
 Config::Set('plugin.banneroid.images_mime', array('image/jpeg', 'image/gif', 'image/png'));
 //Config::Set('plugin.banneroid.hook_tyoes', array('', 'topic_show_end', '__SIDE_BAR__'));
-Config::Set('plugin.banneroid.banner_block_order', 900);
+Config::Set('plugin.banneroid.banner_block_order', 205);
 Config::Set('plugin.banneroid.banner_content_hook', 'template_topic_show_end');
 Config::Set('plugin.banneroid.banner_skip_actions', array('error','banneroid'));
 

@@ -71,4 +71,7 @@ return array(
     'banneroid_error_html' => 'Пустое поле с HTML кодом',
     'banneroid_error_date_start' => 'Неверная дата старта',
     'banneroid_error_date_end' => 'Неверная дата окончания',
+    
+    'banneroid_select_lang' => 'Выберите язык',
+    'banneroid_error_lang' => 'Не верно выбран язык',
 );
