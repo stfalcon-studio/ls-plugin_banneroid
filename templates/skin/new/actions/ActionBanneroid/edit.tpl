@@ -1,5 +1,7 @@
-{assign var="noSidebar" value=true}
+{assign var="bNoSidebar" value=true}
 {include file='header.tpl' showWhiteBack=true menu='banneroid'}
+<link rel="stylesheet" media="screen" type="text/css" href="{$sTemplateWebPathPluginBanneroid}css/datepicker_vista.css" />
+<script type="text/javascript" src="{$sTemplateWebPathPluginBanneroid}js/datepicker.js"></script>
 <script type="text/javascript" src="{$sTemplateWebPathPluginBanneroid}js/banneroid.js"></script>
 <div class="page people">
 
@@ -9,12 +11,12 @@
 
         <label>
             {$aLang.plugin.banneroid.banneroid_name}<br/>
-            <input class="input-wide" type="text" id="banner_name" name="banner_name" value="{$_aRequest.banner_name}"  />
+            <input class="w100p text" type="text" id="banner_name" name="banner_name" value="{$_aRequest.banner_name}"  />
         </label>
         <br/>
         <label>
             {$aLang.plugin.banneroid.banneroid_url}<br/>
-            <input class="input-wide" type="text" id="banner_url" name="banner_url" value="{$_aRequest.banner_url}"  />
+            <input class="w100p text" type="text" id="banner_url" name="banner_url" value="{$_aRequest.banner_url}"  />
         </label>
         <br />
         <br />
@@ -34,7 +36,7 @@
     <div id="kind_html"  {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}style="display:none"{/if}>
         <label>
             <strong>{$aLang.plugin.banneroid.banneroid_kind_html}</strong><br />
-            <textarea id="banner_html" name="banner_html" cols="40" rows="20" class="input-wide">{$_aRequest.banner_html}</textarea>
+            <textarea id="banner_html" name="banner_html" cols="40" rows="20">{$_aRequest.banner_html}</textarea>
         </label>
         <br/>
     </div>
@@ -61,17 +63,17 @@
     <br/>
     <br />
 
-    <table class="table table-people table-talk" style="width: 500px;">
+    <table style="width:500px" border="0">
         <thead>
             <tr>
                 <td>{$aLang.plugin.banneroid.banneroid_page}</td>
-                <td style="width:20px;">&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
         </thead>
         {foreach from=$_aRequest.banner_places item=ban_place}
 
             <tr>
-                <td>{$aLang.plugin.banneroid[$ban_place.place_name]}</td>
+                <td>{$aLang[$ban_place.place_name]}</td>
                 <td ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"
                     {if $aPages[$ban_place.place_id]}checked="checked"{/if} class="side_bar" /></td>
         </tr>
@@ -93,9 +95,9 @@
             <option value="0"></option>
             {foreach from=$aLangs key=sLangKey item=sLangText}
                 <option {if $_aRequest.banner_lang == $sLangKey}selected="selected"{/if}value="{$sLangKey}">{$aLang.plugin.banneroid.$sLangText}</option>
-            {/foreach}
+            {/foreach}    
         </select>
-    </p>
+    </p>       
 {/if}
 <input type="submit" name="submit_banner" value="{$aLang.plugin.banneroid.banneroid_save}" />
 <input type="submit" name="cancel" value="{$aLang.plugin.banneroid.banneroid_cancel}"/>
