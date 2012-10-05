@@ -92,7 +92,7 @@
         <select id="banneroid_lang" class="w100" name="banneroid_lang">
             <option value="0"></option>
             {foreach from=$aLangs key=sLangKey item=sLangText}
-                <option {if $_aRequest.banner_lang == $sLangKey}selected="selected"{/if}value="{$sLangKey}">{$aLang.plugin.banneroid.$sLangText}</option>
+                <option {if $_aRequest.plugin.banneroid.banner_lang == $sLangKey}selected="selected"{/if}value="{$sLangKey}">{$sLangKey}</option>
             {/foreach}
         </select>
     </p>
