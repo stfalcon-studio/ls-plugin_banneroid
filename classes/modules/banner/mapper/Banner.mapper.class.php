@@ -81,11 +81,11 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                         banner_start_date<=CURDATE()
                     AND
                         (banner_end_date>=CURDATE() OR banner_end_date="0000-00-00")';
-        
+
         if (!is_null($sLang)) {
             $sql .= ' AND (banner_lang = \'' . $sLang . '\' OR banner_lang IS NULL) ';
-        } 
-        
+        }
+
         $sql .='
                 GROUP BY
                         banner.banner_id

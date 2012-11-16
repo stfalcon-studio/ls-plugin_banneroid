@@ -20,6 +20,10 @@ jQuery(document).ready(function(){
         };
     });
 
+    jQuery('#kind_image input[name=banner_image]').bind('change',function(){
+        $('#kind_image input[ name=banner_image_tmp]').val($('#kind_image input[ name=banner_image]').val())
+    });
+
     // Submit clear
     jQuery('#fmBanneroid').submit(function() {
         selected_kind = jQuery('#kinds input[name=banner_kind]').val();

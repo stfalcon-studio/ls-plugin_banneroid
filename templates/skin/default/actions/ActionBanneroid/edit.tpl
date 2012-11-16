@@ -5,6 +5,7 @@
 
     <form method="post" action="" enctype="multipart/form-data" id="fmBanneroid">
         <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
+        {if $_aRequest.banner_id}<input type="hidden" name="banner_id" value="{$_aRequest.banner_id}" />{/if}
         <h1><span>{if $add_banner}{$aLang.plugin.banneroid.banneroid_add}{else}{$aLang.plugin.banneroid.banneroid_edit}{/if}</span></h1>
 
         <label>
@@ -20,21 +21,22 @@
         <br />
         <fieldset id="kinds" style="width:500px;">
             <legend><strong>{$aLang.plugin.banneroid.banneroid_kind}</strong><br /></legend>
-            <label><input name="banner_kind" type="radio" value="kind_image" {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_image}</label>
-            <label><input name="banner_kind" type="radio" value="kind_html" {if not $_aRequest.banner_is_image || $_aRequest.banner_html!=''}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_html}</label><br />
+            <label><input name="banner_kind" type="radio" value="kind_image" {if $_aRequest.banner_is_image || $_aRequest.banner_kind=='kind_image'}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_image}</label>
+            <label><input name="banner_kind" type="radio" value="kind_html" {if not $_aRequest.banner_is_image}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_html}</label><br />
         </fieldset>
         <br />
-        <div id="kind_image" {if not $_aRequest.banner_is_image || $_aRequest.banner_html!=''}style="display:none"{/if}>
+        <!--not $_aRequest.banner_is_image ||-->
+        <div id="kind_image" {if $_aRequest.banner_kind == 'kind_html'}style="display:none"{/if}>
             <label><strong>{$aLang.plugin.banneroid.banneroid_kind_image}</strong><br/>
-                <input class="w40p text" type="file" id="banner_image" name="banner_image"   /><br />
-            {if $_aRequest.banner_is_image}<img src="{$_aRequest.banner_image}" />{/if}
-        </label>
+                <input class="w40p text" type="file" id="banner_image" name="banner_image" value="{$_aRequest.banner_image_tmp}"/></br>
+                {if $_aRequest.banner_is_image}<img src="{$_aRequest.banner_image}" />{/if}
+            </label>
         <br/>
     </div>
-    <div id="kind_html"  {if $_aRequest.banner_is_image && $_aRequest.banner_html==''}style="display:none"{/if}>
+    <div id="kind_html"  {if $_aRequest.banner_is_image || $_aRequest.banner_kind =='kind_image'}style="display:none"{/if}>
         <label>
             <strong>{$aLang.plugin.banneroid.banneroid_kind_html}</strong><br />
-            <textarea id="banner_html" name="banner_html" cols="40" rows="20" class="input-wide">{$_aRequest.banner_html}</textarea>
+            <textarea id="banneroid_html" name="banneroid_html" cols="40" rows="20" class="input-wide">{$_aRequest.banneroid_html}</textarea>
         </label>
         <br/>
     </div>
@@ -68,13 +70,11 @@
                 <td style="width:20px;">&nbsp;</td>
             </tr>
         </thead>
-        {foreach from=$_aRequest.banner_places item=ban_place}
-
+        {foreach from=$aPlaces item=ban_place}
             <tr>
                 <td>{$aLang.plugin.banneroid[$ban_place.place_name]}</td>
-                <td ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"
-                    {if $aPages[$ban_place.place_id]}checked="checked"{/if} class="side_bar" /></td>
-        </tr>
+                    <td ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"{foreach from=$_aRequest.banner_places item=place}{if $place ==$ban_place.place_id }checked="checked"{/if}{/foreach} class="side_bar" /></td>
+            </tr>
     {/foreach}
 </table>
 
@@ -89,10 +89,10 @@
 {if count($aLangs)}
     <p>
         <label>{$aLang.plugin.banneroid.banneroid_select_lang}</label>
-        <select id="banneroid_lang" class="w100" name="banneroid_lang">
+        <select id="banner_lang" class="w100" name="banner_lang">
             <option value="0"></option>
             {foreach from=$aLangs key=sLangKey item=sLangText}
-                <option {if $_aRequest.plugin.banneroid.banner_lang == $sLangKey}selected="selected"{/if}value="{$sLangKey}">{$sLangKey}</option>
+                <option {if $_aRequest.banner_lang == $sLangKey}selected="selected"{/if}value="{$sLangKey}">{$sLangKey}</option>
             {/foreach}
         </select>
     </p>

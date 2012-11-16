@@ -24,7 +24,7 @@ class PluginBanneroid_ModuleBanner extends Module {
      * @var Mapper
      */
     protected $_aPlaceNames;
-    
+
     protected $aActivePlugins = array();
 
     /**
@@ -125,13 +125,13 @@ class PluginBanneroid_ModuleBanner extends Module {
      *
      * @return bool
      */
-    public function UpdateBanner(PluginBanneroid_ModuleBanner_EntityBanner $oBanner) {
-        if ($oBanner->getBannerId() == '0') {
-            return $this->_oMapper->AddBanner($oBanner);
-        } else {
-            return $this->_oMapper->UpdateBanner($oBanner);
-        }
-    }
+//    public function UpdateBanner(PluginBanneroid_ModuleBanner_EntityBanner $oBanner) {
+//        if ($oBanner->getBannerId() == '0') {
+//            return $this->_oMapper->AddBanner($oBanner);
+//        } else {
+//            return $this->_oMapper->UpdateBanner($oBanner);
+//        }
+//    }
 
     /**
      * Get all available pages
@@ -212,7 +212,7 @@ class PluginBanneroid_ModuleBanner extends Module {
 
     /**
      * Hide banner
-     * 
+     *
      * @param int $sBannerId
      * @return void
      */
@@ -223,7 +223,7 @@ class PluginBanneroid_ModuleBanner extends Module {
 
     /**
      * Return page url
-     * 
+     *
      * @return string
      */
     public function GetFullUrl() {
@@ -249,7 +249,7 @@ class PluginBanneroid_ModuleBanner extends Module {
      * @return array
      */
     public function GetFooterBanners($sUrl, $bAddStats=false) {
-        
+
         return $this->GetBannersByPosition($sUrl, $bAddStats, 4);
     }
 
@@ -291,139 +291,65 @@ class PluginBanneroid_ModuleBanner extends Module {
 
         return $this->GetBannersByPosition($sUrl, $bAddStats, 1);
     }
-    
+
     /**
      * Save banner
      * @param object $oBanner
      * @return boolean
      */
-    function Save($oBanner) {
-        if (isset($_REQUEST['submit_banner'])) { // Update or insert banner
-            $iBannerId = $oBanner->getId();
+//    function Save($oBanner) {
+//
+//        if ($oBanner->getId() != 0){
+//            $data = $this->_oMapper->UpdateBanner($oBanner);
+//        }else{
+//            $data = $this->_oMapper->AddBanner($oBanner);
+//        }
+//        return $data;
+//    }
 
-            $sStartDate = $_REQUEST['banner_start_date'];
-            $sEndDate = $_REQUEST['banner_end_date'];
-
-            $bStateError = 0;
-            if (!preg_match(Config::Get('plugin.banneroid.banner_date_reg'), $sStartDate)) {
-                $this->Message_AddError(
-                        $this->Lang_Get("plugin.banneroid.banneroid_error_date_start"),
-                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                $bStateError = 1;
+    /**
+     *Add banner
+     *
+     * @param type $oBanner
+     * @return boolean
+     */
+    public function AddBanner($oBanner){
+        if ($sId=$this->_oMapper->AddBanner($oBanner)) {
+			$oBanner->setBannerId($sId);
+            if ($places = $oBanner->getBannerPlaces()){
+                 $aPages = array_fill(1, 4, array());
+                 $iBannerType = $oBanner->getBannerType();
+                 $aPages[$iBannerType] = $places;
+                 $this->UpdateBannerPages($aPages, $oBanner);
             }
+			return $oBanner;
+		}
+		return false;
+    }
 
-            if (!preg_match(Config::Get('plugin.banneroid.banner_date_reg'), $sEndDate)) {
-                $this->Message_AddError(
-                        $this->Lang_Get("plugin.banneroid.banneroid_error_date_end"),
-                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                $bStateError = 1;
+    /**
+     *Update banner
+     *
+     * @param type $oBanner
+     * @return boolean
+     */
+    public function UpdateBanner(PluginBanneroid_ModuleBanner_EntityBanner $oBanner){
+        if ($sId=$this->_oMapper->UpdateBanner($oBanner)) {
+			$oBanner->setBannerId($sId);
+            if ($places = $oBanner->getBannerPlaces()){
+                 $aPages = array_fill(1, 4, array());
+                 $iBannerType = $oBanner->getBannerType();
+                 $aPages[$iBannerType] = $places;
+                 $this->UpdateBannerPages($aPages, $oBanner);
             }
-
-
-            if (!func_check($_REQUEST['banner_name'], 'text', 2, 3000)) {
-                $this->Message_AddError(
-                        $this->Lang_Get("plugin.banneroid.banneroid_error_name"),
-                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                $bStateError = 1;
-            }
-
-            if (!preg_match(Config::Get('plugin.banneroid.banner_url_reg'), $_REQUEST['banner_url']) and !$_REQUEST['banner_html']) {
-                $this->Message_AddError(
-                        $this->Lang_Get("plugin.banneroid.banneroid_error_url"),
-                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                $bStateError = 1;
-            }
-            
-            
-            if (in_array('l10n', $this->aActivePlugins)) {
-                $sLang = getRequest('banneroid_lang');
-                if ($sLang === '0') {
-                    $sLang = null;
-                } else {
-                    $aLangs = $this->PluginL10n_L10n_GetAllowedLangs();
-                    if (!in_array($sLang, $aLangs)) {
-                        $this->Message_AddError(
-                            $this->Lang_Get("plugin.banneroid.banneroid_error_lang"),
-                            $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                        $bStateError = true;
-                    }
-                }
-            } else {
-                $sLang = null;
-            }
-
-            if ($bStateError) {
-                return false;
-            }
-
-
-            // Fill banner entity object
-            $oBanner->setBannerHtml($_REQUEST['banner_html']);
-            $oBanner->setBannerName($_REQUEST['banner_name']);
-            $oBanner->setBannerUrl($_REQUEST['banner_url']);
-            $oBanner->setBannerLang($sLang);
-            $oBanner->setBannerStartDate($sStartDate);
-            $oBanner->setBannerEndDate($sEndDate);
-            $oBanner->setBannerType($_REQUEST['banner_type']);
-            $oBanner->setBannerIsActive($_REQUEST['banner_is_active']);
-
-            $iOk = 1;
-
-            //upload image for banner ------------
-            if (isset($_FILES["banner_image"]) && $_FILES["banner_image"]["error"] == 0) {
-                $aImageFile = $_FILES["banner_image"];
-
-                $aSize = @getimagesize($aImageFile["tmp_name"]);
-                if (!in_array($aSize['mime'], Config::Get('plugin.banneroid.images_mime'))) {
-                    $this->Message_AddError(
-                            $this->Lang_Get("plugin.banneroid.banneroid_error_image_extension"),
-                            $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                    $iOk = 0;
-                } else
-
-                if (!$this->UploadImage($aImageFile, $oBanner)) {
-                    $this->Message_AddError(
-                            $this->Lang_Get("plugin.banneroid.banneroid_error_unable_to_upload_image"),
-                            $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                    $iOk = 0;
-                }
-            }
-
-            if ($iOk) { //If no errors add or update banner
-                $iRes = $this->UpdateBanner($oBanner);
-            }
-
-            if ($iBannerId == 0 && isset($iRes)) { // Update id for new banner
-                $oBanner->setBannerId($iRes);
-            }
-
-            if (!isset($iRes)) { //show error editiding banner
-                $this->Message_AddError(
-                        $this->Lang_Get("plugin.banneroid.banneroid_error_edit"),
-                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                return false;
-            } elseif(is_array(getRequest('banner_place')) && count(getRequest('banner_place'))) {
-                // Add banner pages --------------
-                $aPages = array_fill(1, 4, array());
-                $iBannerType = (int) getRequest('banner_type');
-                switch ($iBannerType){
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        $aPages[$iBannerType] = getRequest('banner_place', array());
-                        break;
-                }
-                $this->UpdateBannerPages($aPages, $oBanner);
-            }
-            return true;
-        }
-        return false;
+			return $oBanner;
+		}
+		return false;
     }
 
     /**
      * Add banner statistics to db
-     * @param array $aParams     
+     * @param array $aParams
      * @return void
      */
     public function AddBannerStats($aParams) {
