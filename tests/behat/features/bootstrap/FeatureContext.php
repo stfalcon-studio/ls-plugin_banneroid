@@ -36,22 +36,14 @@ class FeatureContext extends MinkContext
     {
         foreach ($table->getHash() as $genreHash) {
 
-//            var_dump($this->getSession()->getPage()->getContent()); die;
-
-
-
-            if ($genreHash['text'] != '') {
-                $pattern ='".*' . $genreHash['text'] . '.*"';
+            if ($genreHash['image'] != '' && $genreHash['text'] != '')
+            {
+                $pattern = '".*' . $genreHash['image'] . '|' . $genreHash['text'] . '.*"';
+            } else if ($genreHash['text'] != '') {
+                $pattern = '".*' . $genreHash['text'] . '.*"';
+            } else if ($genreHash['image'] != '') {
+                $pattern = '".*<img src=\"' . $genreHash['value'] . '\">.*"';
             }
-            else if ($genreHash['image'] != '') {
-                $pattern ='".*<img src=\"' . $genreHash['value'] . '\">.*"';
-            }
-            else if($genreHash['text'] != '' &&  $genreHash['image'] != ''){
-            $pattern ='".*' . $genreHash['text'] . '|' . $genreHash['image'] . '.*"';
-//                throw new Exception("Matches the specified parameters not found");
-            }
-
-//            $pattern ='".*' . $genreHash['value'] . '|' . $genreHash['value'] . '.*"';
             $this->assertSession()->responseMatches($pattern);
         }
     }

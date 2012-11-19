@@ -1,17 +1,31 @@
 Feature: Banneroid plugin standart features BDD
   Test base functionality of LiveStreet banneroid plugin standart
 
-    Scenario: Authorization Admininstator
+    Scenario: Activated plugin and Load Fixtures  Banneroid Plugin
         Given I am activated plugin "banneroid"
         Given I load fixtures for plugin "banneroid"
 
+        Given I am on homepage
+            Then the response status code should be 200
+        Given the following banners exist:
+            | image                | text                                |
+            | stfalcon_logo_2.jpg  | Banner footer Stfalcon - contacts  |
+            |livestreet_logo.jpeg  | Banner sidebar Stfalcon             |
+            |jquery.jpeg           | Banner header Stfalcon - blog       |
 
-#        Given I am on "/blog/gadgets/"
-#            Then the response status code should be 200
+        Given I am on "/blog/gadgets/"
+            Then the response status code should be 200
+        Given the following banners exist:
+            | image                | text                                |
+            | stfalcon_logo_2.jpg  | Banner footer Stfalcon - contacts   |
+            |livestreet_logo.jpeg  | Banner sidebar Stfalcon             |
+            |jquery.jpeg           | Banner header Stfalcon - blog       |
 
-
-#        Given the following banners exist:
-#            | image         | text                                                                 |
-#            | http://livestreet_101.ru.work/uploads/banneroid/jquery.jpeg | Web development Header Banner                                        |
-#            |               | Web development Stfalcon                                             |
-#            | http://livestreet_101.ru.work/uploads/banneroid/stfalcon_logo_2.jpg  | Development Footer Banner for Example Stfalcon                        |
+        Given I am on "blog/gadgets/1.html"
+            Then the response status code should be 200
+        Given the following banners exist:
+            | image                | text                                |
+            |ZF2.jpeg              | Web development                     |
+            |stfalcon_logo_2.jpg   | Banner footer Stfalcon - contacts   |
+            |livestreet_logo.jpeg  | Banner sidebar Stfalcon             |
+            |jquery.jpeg           | Banner header Stfalcon - blog       |

@@ -20,21 +20,21 @@ class BanneroidFixtures extends AbstractFixtures
         $sDateBefore = date("Y-m-d", time()-86400);
         $sDateAfter = date("Y-m-d", time()+86400);
         //Add banner HTML
-        $oBannerStfalcon_1 = $this->_createBanner('(1)H->stfalcon - examples of works:Place->under Article', 'http://stfalcon.com/',
+        $oBannerStfalcon = $this->_createBanner('(1)H->stfalcon - examples of works:Place->under Article', 'http://stfalcon.com/',
             '<h1>Web development</h1>', null, $sDateBefore, $sDateAfter,'1',array('1','2'),'kind_html');
-        $this->addReference('banner-stfalcon-under-article', $oBannerStfalcon_1);
+        $this->addReference('banner-stfalcon-under-article', $oBannerStfalcon);
 
-        $oBannerStfalcon_2 = $this->_createBanner('(2)H->stfalcon - examples of works:Place->sidebar', 'http://stfalcon.com/',
-            '<h1>Web development Stfalcon</h1>', null,  $sDateBefore, $sDateAfter,'2',array('2'),'kind_html');
-        $this->addReference('banner-stfalcon-under-article', $oBannerStfalcon_2);
+        $oBannerStfalcon = $this->_createBanner('(2)Banner sidebar Stfalcon', 'http://stfalcon.com/',
+            '<h1>Banner sidebar Stfalcon</h1>', null,  $sDateBefore, $sDateAfter,'2',array('2'),'kind_html');
+        $this->addReference('banner-stfalcon-under-article', $oBannerStfalcon);
 
-        $oBannerStfalcon_3 = $this->_createBanner('(3)H->stfalcon - examples of works:Place->header', 'http://stfalcon.com/',
-            '<h1>Web development Header Banner</h1>', null,  $sDateBefore, $sDateAfter,'3',array('2'),'kind_html');
-        $this->addReference('banner-stfalcon-header', $oBannerStfalcon_3);
+        $oBannerStfalcon = $this->_createBanner('(3)Banner header Stfalcon - blog', 'http://stfalcon.com/blog',
+            '<h1>Banner header Stfalcon - blog</h1>', null,  $sDateBefore, $sDateAfter,'3',array('2'),'kind_html');
+        $this->addReference('banner-stfalcon-header', $oBannerStfalcon);
 
-        $oBannerStfalcon_4 = $this->_createBanner('(4)H->stfalcon - examples of works:Place->footer', 'http://stfalcon.com/',
-            '<h1 align="center">Development Footer Banner for Example Stfalcon</h1>', null,  $sDateBefore, $sDateAfter,'4',array('1'),'kind_html');
-        $this->addReference('banner-stfalcon-footer', $oBannerStfalcon_4);
+        $oBannerStfalcon = $this->_createBanner('(4)Banner footer Stfalcon - contacts', 'http://stfalcon.com/contacts',
+            '<h1 align="center">Banner footer Stfalcon - contacts</h1>', null,  $sDateBefore, $sDateAfter,'4',array('1'),'kind_html');
+        $this->addReference('banner-stfalcon-footer', $oBannerStfalcon);
 
         //Add banner Images
 
