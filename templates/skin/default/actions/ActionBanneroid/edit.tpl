@@ -22,18 +22,17 @@
         <fieldset id="kinds" style="width:500px;">
             <legend><strong>{$aLang.plugin.banneroid.banneroid_kind}</strong><br /></legend>
             <label><input name="banner_kind" type="radio" value="kind_image" {if $_aRequest.banner_is_image || $_aRequest.banner_kind=='kind_image'}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_image}</label>
-            <label><input name="banner_kind" type="radio" value="kind_html" {if not $_aRequest.banner_is_image}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_html}</label><br />
+            <label><input name="banner_kind" type="radio" value="kind_html" {if not $_aRequest.banner_is_image || $_aRequest.banneroid_html != ''}checked="checked"{/if} />{$aLang.plugin.banneroid.banneroid_kind_html}</label><br />
         </fieldset>
         <br />
-        <!--not $_aRequest.banner_is_image ||-->
-        <div id="kind_image" {if $_aRequest.banner_kind == 'kind_html'}style="display:none"{/if}>
+        <div id="kind_image" {if $_aRequest.banner_kind == 'kind_html' || $_aRequest.banneroid_html != ''}style="display:none"{/if}>
             <label><strong>{$aLang.plugin.banneroid.banneroid_kind_image}</strong><br/>
                 <input class="w40p text" type="file" id="banner_image" name="banner_image" value="{$_aRequest.banner_image_tmp}"/></br>
                 {if $_aRequest.banner_is_image}<img src="{$_aRequest.banner_image}" />{/if}
             </label>
         <br/>
     </div>
-    <div id="kind_html"  {if $_aRequest.banner_is_image || $_aRequest.banner_kind =='kind_image'}style="display:none"{/if}>
+    <div id="kind_html"  {if  $_aRequest.banneroid_html == ''}style="display:none"{/if}>
         <label>
             <strong>{$aLang.plugin.banneroid.banneroid_kind_html}</strong><br />
             <textarea id="banneroid_html" name="banneroid_html" cols="40" rows="20" class="input-wide">{$_aRequest.banneroid_html}</textarea>
@@ -73,9 +72,9 @@
         {foreach from=$aPlaces item=ban_place}
             <tr>
                 <td>{$aLang.plugin.banneroid[$ban_place.place_name]}</td>
-                    <td ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"{foreach from=$_aRequest.banner_places item=place}{if $place ==$ban_place.place_id }checked="checked"{/if}{/foreach} class="side_bar" /></td>
+                <td ><input name="banner_place[]" type="checkbox" value="{$ban_place.place_id}"{foreach from=$_aRequest.banner_places key=k item=place}{if $k == $ban_place.place_id }checked="checked"{/if}{/foreach} class="side_bar" /></td>
             </tr>
-    {/foreach}
+        {/foreach}
 </table>
 
 <br />

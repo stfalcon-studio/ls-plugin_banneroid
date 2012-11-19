@@ -118,20 +118,6 @@ class PluginBanneroid_ModuleBanner extends Module {
         return false;
     }
 
-    /**
-     * Update banner
-     *
-     * @param PluginBanneroid_ModuleBanner_EntityBanner $oBanner
-     *
-     * @return bool
-     */
-//    public function UpdateBanner(PluginBanneroid_ModuleBanner_EntityBanner $oBanner) {
-//        if ($oBanner->getBannerId() == '0') {
-//            return $this->_oMapper->AddBanner($oBanner);
-//        } else {
-//            return $this->_oMapper->UpdateBanner($oBanner);
-//        }
-//    }
 
     /**
      * Get all available pages
@@ -293,21 +279,6 @@ class PluginBanneroid_ModuleBanner extends Module {
     }
 
     /**
-     * Save banner
-     * @param object $oBanner
-     * @return boolean
-     */
-//    function Save($oBanner) {
-//
-//        if ($oBanner->getId() != 0){
-//            $data = $this->_oMapper->UpdateBanner($oBanner);
-//        }else{
-//            $data = $this->_oMapper->AddBanner($oBanner);
-//        }
-//        return $data;
-//    }
-
-    /**
      *Add banner
      *
      * @param type $oBanner
@@ -334,8 +305,7 @@ class PluginBanneroid_ModuleBanner extends Module {
      * @return boolean
      */
     public function UpdateBanner(PluginBanneroid_ModuleBanner_EntityBanner $oBanner){
-        if ($sId=$this->_oMapper->UpdateBanner($oBanner)) {
-			$oBanner->setBannerId($sId);
+        if ($this->_oMapper->UpdateBanner($oBanner)) {
             if ($places = $oBanner->getBannerPlaces()){
                  $aPages = array_fill(1, 4, array());
                  $iBannerType = $oBanner->getBannerType();

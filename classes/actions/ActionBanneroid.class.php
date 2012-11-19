@@ -176,20 +176,6 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
             $this->sLang = null;
         }
 
-//(isset($_FILES["banner_image"]['tmp_name']) && && getRequest('banner_kind') != "kind_html"
-      /*  if (getRequest('banner_is_image') && getRequest('banner_kind') != "kind_html") {
-            $aImageFile = $_FILES["banner_image"];
-            $aSize = @getimagesize($aImageFile["tmp_name"]);
-            $aSize['mime'];
-
-                if (!in_array($aSize['mime'], Config::Get('plugin.banneroid.images_mime'))) {
-                    $this->Message_AddError(
-                        $this->Lang_Get("plugin.banneroid.banneroid_error_image_extension"), $this->Lang_Get('plugin.banneroid.banneroid_error'));
-                    $bStateError = true;
-            }
-        }*/
-
-
            if (isset($_FILES["banner_image"]) && $_FILES["banner_image"]["error"] == 0) {
                 $aImageFile = $_FILES["banner_image"];
 
@@ -202,23 +188,12 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
                 }
             }
 
-//        if (!$this->sFileUpload){
-//                $this->Message_AddError($this->Lang_Get("plugin.banneroid.banneroid_error_unable_to_upload_image"), $this->Lang_Get('plugin.banneroid.banneroid_error'));
-//                $bStateError = true;
-//        }
 
         if (!is_array(getRequest('banner_place')) && count(getRequest('banner_place')) == 0) {
 
                 $this->Message_AddError(
-                    $this->Lang_Get("plugin.banneroid.banneroid_error_place"), $this->Lang_Get('plugin.banneroid.banneroid_error'));
+                    $this->Lang_Get("plugin.banneroid.banneroid_error_place"), $this->Lang_Get('banneroid_error'));
                 $bStateError = true;
-        } else {
-            $aPlaces = array();
-            foreach (getRequest('banner_place') as $place) {
-                if (!in_array($place, $aPlaces)) {
-                    //error
-                }
-            }
         }
 
         /**
@@ -240,15 +215,21 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         $this->SetTemplateAction('edit');
 
-
+        /*
+         * проверка на активность плагина l10n
+         */
         if (in_array('l10n', $this->aActivePlugins)) {
             $aLangs = $this->PluginL10n_L10n_GetAllowedLangsToViewer();
             $this->Viewer_Assign('aLangs', $aLangs);
         }
 
+        //Передача всех страниц на которых баннер может размещаться
         $this->Viewer_Assign('aPlaces', $this->PluginBanneroid_Banner_GetAllPages());
 
 
+        /*
+         * Добавления банера
+         */
         if (getRequest('submit_banner')) {
 
             /**
@@ -271,11 +252,14 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
             $oBanner->setBannerIsActive(getRequest('banner_is_active'));
             $oBanner->setBannerType(getRequest('banner_type'));
             $oBanner->setBannerPlaces(getRequest('banner_place'));
-            //Upload Images
+            //Загрузка фото
             $aImageFile = $_FILES["banner_image"];
             $this->sFileUpload = $this->PluginBanneroid_Banner_UploadImage($aImageFile, $oBanner);
 
 
+            /*
+             * Сохранения банера в БД
+             */
             if ($this->PluginBanneroid_ModuleBanner_AddBanner($oBanner)){
                 $this->Message_AddNotice($this->Lang_Get('plugin.banneroid.banneroid_ok_add'), $this->Lang_Get('attention'), true);
                 Router::Location(Config::Get("path.root.web") . '/banneroid/');
@@ -289,21 +273,6 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         }
 
     }
-
-
-    /**
-     *
-     * @param Add banner pages
-     * @return boolean
-     */
-//    protected function EventBannerPagesAdd($oBanner){
-//        $aPages = array_fill(1, 4, array());
-//        $iBannerType = (int) getRequest('banner_type');
-//
-//        $aPages[$iBannerType] = getRequest('banner_place', array());
-//
-//        $this->PluginBanneroid_Banner_UpdateBannerPages($aPages, $oBanner);
-//    }
 
 
 
@@ -322,23 +291,30 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
      * @return void
      */
     protected function EventBannerEdit() {
+        //Получаэм ИД текущего баннера
         $sBannerId = (int) $this->GetParam('banner_id');
+        //устанавливаем шаблон
+        $this->SetTemplateAction('edit');
+        //Передача всех страниц на которых баннер может размещаться
+        $this->Viewer_Assign('aPlaces', $this->PluginBanneroid_Banner_GetAllPages());
 
-         $this->SetTemplateAction('edit');
-
-
-         $oBanner = $this->PluginBanneroid_Banner_GetBannerById($sBannerId);
-        if ($_REQUEST){
+        $oBanner = $this->PluginBanneroid_Banner_GetBannerById($sBannerId);
+        if ($_REQUEST) {
             $_REQUEST['banner_image'] = Config::Get("plugin.banneroid.images_dir") . $oBanner->getBannerImage();
             $_REQUEST['banner_is_image'] = true;
         }
 
+        /*
+         * проверка на активность плагина l10n
+         */
         if (in_array('l10n', $this->aActivePlugins)) {
             $aLangs = $this->PluginL10n_L10n_GetAllowedLangsToViewer();
             $this->Viewer_Assign('aLangs', $aLangs);
         }
-
-       if (!$oBanner) {
+        /*
+         * проверка на существования банера
+         */
+        if (!$oBanner) {
             return Router::Action('error');
         }
 
@@ -355,13 +331,12 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
             // Fill banner entity object
             $oBanner->setBannerName(getRequest('banner_name'));
-
-//            if(getRequest('banner_kind' == 'kind_image')){
-                if (isset($_FILES["banner_image"]) && (getRequest('banner_kind') == 'kind_image')){
-                    //Upload Images
-                    $aImageFile = $_FILES["banner_image"];
-                    $this->PluginBanneroid_Banner_UploadImage($aImageFile, $oBanner);
-                }else {
+            //перезагрузка фото баннера
+            if (isset($_FILES["banner_image"]) && (getRequest('banner_kind') == 'kind_image')) {
+                //загрузка фото
+                $aImageFile = $_FILES["banner_image"];
+                $this->PluginBanneroid_Banner_UploadImage($aImageFile, $oBanner);
+            } else {
                 $oBanner->setBannerHtml(getRequest('banneroid_html'));
             }
             $oBanner->setBannerUrl(getRequest('banner_url'));
@@ -372,26 +347,25 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
             $oBanner->setBannerType(getRequest('banner_type'));
             $oBanner->setBannerPlaces(getRequest('banner_place'));
 
-            if ($this->PluginBanneroid_ModuleBanner_UpdateBanner($oBanner)){
+            if ($this->PluginBanneroid_ModuleBanner_UpdateBanner($oBanner)) {
                 $this->Message_AddNotice($this->Lang_Get('plugin.banneroid.banneroid_ok_edit'), $this->Lang_Get('attention'), true);
                 Router::Location(Config::Get("path.root.web") . '/banneroid/');
             }
         }
 
-            $_REQUEST['banner_id'] = $oBanner->getId();
-            $_REQUEST['banner_name'] = $oBanner->getBannerName();
-            $_REQUEST['banneroid_html'] = $oBanner->getBannerHtml();
-            $_REQUEST['banner_url'] = $oBanner->getBannerUrl();
-            $_REQUEST['banner_lang'] = $oBanner->getBannerLang();
-            $_REQUEST['banner_start_date'] = $oBanner->getBannerStartDate();
-            $_REQUEST['banner_end_date'] = $oBanner->getBannerEndDate();
-            $_REQUEST['banner_is_active'] = $oBanner->getBannerIsActive();
-            $_REQUEST['banner_places'] = $oBanner->PluginBanneroid_Banner_GetActivePages($oBanner);
-            $_REQUEST['banner_type'] = $oBanner->getBannerType();
-            $_REQUEST['banner_image'] = Config::Get("plugin.banneroid.images_dir") . $oBanner->getBannerImage();
-            $_REQUEST['banner_is_image'] = true;
-            $this->Viewer_Assign('oBanner', $oBanner);
-            $this->Viewer_Assign('aPlaces', $this->PluginBanneroid_Banner_GetAllPages());
+        $_REQUEST['banner_id'] = $oBanner->getId();
+        $_REQUEST['banner_name'] = $oBanner->getBannerName();
+        $_REQUEST['banneroid_html'] = $oBanner->getBannerHtml();
+        $_REQUEST['banner_url'] = $oBanner->getBannerUrl();
+        $_REQUEST['banner_lang'] = $oBanner->getBannerLang();
+        $_REQUEST['banner_start_date'] = $oBanner->getBannerStartDate();
+        $_REQUEST['banner_end_date'] = $oBanner->getBannerEndDate();
+        $_REQUEST['banner_is_active'] = $oBanner->getBannerIsActive();
+        $_REQUEST['banner_places'] = $oBanner->PluginBanneroid_Banner_GetActivePages($oBanner);
+        $_REQUEST['banner_type'] = $oBanner->getBannerType();
+        $_REQUEST['banner_image'] = Config::Get("plugin.banneroid.images_dir") . $oBanner->getBannerImage();
+        $_REQUEST['banner_is_image'] = true;
+        $this->Viewer_Assign('oBanner', $oBanner);
     }
 
     /**
