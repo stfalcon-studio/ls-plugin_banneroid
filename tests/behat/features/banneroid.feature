@@ -9,7 +9,7 @@ Feature: Banneroid plugin standart features BDD
             Then the response status code should be 200
         Given the following banners exist:
             | image                | text                                |
-            | stfalcon_logo_2.jpg  | Banner footer Stfalcon - contacts  |
+            | stfalcon_logo_2.jpg  | Banner footer Stfalcon - contacts   |
             |livestreet_logo.jpeg  | Banner sidebar Stfalcon             |
             |jquery.jpeg           | Banner header Stfalcon - blog       |
 

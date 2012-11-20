@@ -96,7 +96,7 @@
         </select>
     </p>
 {/if}
-<input type="submit" name="submit_banner" value="{$aLang.plugin.banneroid.banneroid_save}" />
+<input type="submit" name="submit_banner" id="submit_banner" value="{$aLang.plugin.banneroid.banneroid_save}" />
 <input type="submit" name="cancel" value="{$aLang.plugin.banneroid.banneroid_cancel}"/>
 
 </form>

@@ -47,4 +47,15 @@ class FeatureContext extends MinkContext
             $this->assertSession()->responseMatches($pattern);
         }
     }
+
+    /**
+     * @When /^I attach the file to path  "([^"]*)" to "([^"]*)"$/
+     */
+    public function iAttachTheFileToBanneroidTo($file_upload, $file_id)
+    {
+         $sDirRoot = dirname(realpath((dirname(__FILE__)) . "/../../../../../"));
+         $file = $this->getMinkContext()->getSession()->getPage()->findById($file_id);
+         $file_upload = $sDirRoot . $file_upload;
+         $file->attachFile($file_upload);
+    }
 }
