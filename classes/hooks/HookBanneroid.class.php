@@ -26,7 +26,7 @@ class PluginBanneroid_HookBanneroid extends Hook
      * @return void
      */
     public function RegisterHook() {
-        $this->AddHook('template_main_menu', 'InitAction', __CLASS__);
+        $this->AddHook('template_main_menu_item', 'InitAction', __CLASS__);
         if (isset($_SERVER['REQUEST_URI'])) {
             $this->AddHook('init_action', 'AddBannerBlock', __CLASS__, -100);
             $this->AddHook(Config::Get('plugin.banneroid.banner_content_hook'), 'AddBannersInContent', __CLASS__, 0);

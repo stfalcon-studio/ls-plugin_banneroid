@@ -51,6 +51,7 @@ class PluginBanneroid extends Plugin {
     public function Init() {
         //add sub menu
         $this->Viewer_AddMenu('banneroid', Plugin::GetTemplatePath(__CLASS__) . 'submenu.banneroid.tpl');
+        $this->Viewer_Assign("sTemplateWebPathPluginBanneroid", Plugin::GetTemplateWebPath(__CLASS__));
     }
 
     /**
