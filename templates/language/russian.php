@@ -26,6 +26,7 @@ return array(
     'banneroid_delete' => 'Удалить',
     'banneroid_edit' => 'Редактировать баннер',
     'banneroid_add' => 'Добавить баннер',
+    'blog_menu_all' => 'Все',
     'banneroid_name' => 'Название баннера',
     'banneroid_url' => 'Урл баннера',
     'banneroid_kind' => 'Вид баннера',

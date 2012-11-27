@@ -1,6 +1,10 @@
 {assign var="noSidebar" value=true}
 {include file='header.tpl' showWhiteBack=true menu='banneroid'}
 <script type="text/javascript" src="{$sTemplateWebPathPluginBanneroid}js/banneroid.js"></script>
+<ul class="nav nav-pills">
+    <li {if !$sEvent || $sEvent=='main'}class="active"{/if}><div><a href="{router page='banneroid'}">{$aLang.plugin.banneroid.blog_menu_all}</a></div></li>
+    <li {if $sEvent=='add'}class="active"{/if}><div><a href="{router page='banneroid'}add/">{$aLang.plugin.banneroid.banneroid_add}</a></div></li>
+</ul>
 <div class="page people">
 
     <form method="post" action="" enctype="multipart/form-data" id="fmBanneroid">

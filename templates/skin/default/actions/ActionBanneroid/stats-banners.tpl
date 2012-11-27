@@ -1,9 +1,12 @@
 {assign var="noSidebar" value=true}
 {include file='header.tpl' showWhiteBack=true menu='banneroid'}
 <script type="text/javascript" src="{$sTemplateWebPathPluginBanneroid}js/banneroid.js"></script>
+<ul class="nav nav-pills">
+    <li {if $sEvent=='stats'}class="active"{/if}><div><a href="{router page='banneroid'}stats/">{$aLang.plugin.banneroid.banneroid_total}</a></div></li>
+    <li {if $sEvent=='stats-banners'}class="active"{/if}><div><a href="{router page='banneroid'}stats-banners/">{$aLang.plugin.banneroid.banneroid_bans_stats}</a></div></li>
+</ul>
 <div class="page people">
-
-    <h1>{if $oBanner}{$oBanner->getName()}{else}{$aLang.plugin.banneroid.banneroid_total}{/if}</h1>
+        <h1>{if $oBanner}{$oBanner->getName()}{else}{$aLang.plugin.banneroid.banneroid_total}{/if}</h1>
     <div style="margin-bottom: 15px;">
         <form action="" method="post" id="statsForm">
             <input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
