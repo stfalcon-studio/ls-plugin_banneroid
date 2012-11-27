@@ -22,7 +22,7 @@ jQuery(document).ready(function(){
 
     // Submit clear
     jQuery('#fmBanneroid').submit(function() {
-        selected_kind = jQuery('#kinds input[name=banner_kind]').val();
+        selected_kind = jQuery('#kinds input[name="banner_kind"]:checked').val();
         if (selected_kind == 'kind_image') {
             $('#banner_html').val('');
         } else {
