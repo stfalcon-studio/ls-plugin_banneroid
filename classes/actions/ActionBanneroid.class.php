@@ -33,7 +33,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         }
         
         $this->aActivePlugins = $this->Plugin_GetActivePlugins();
-        $this->Viewer_AddHtmlTitle($this->Lang_Get('banneroid_title'));
+        $this->Viewer_AddHtmlTitle($this->Lang_Get('plugin.banneroid.banneroid_title'));
         $this->SetDefaultEvent('main');
     }
 
@@ -136,8 +136,8 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         if (getRequest('submit_banner')) {
             if ($this->PluginBanneroid_Banner_Save($oBanner)) {
-                $this->Message_AddNotice($this->Lang_Get('banneroid_ok_add'), $this->Lang_Get('attention'), true);
-                Router::Location('../edit/' . $oBanner->getId());
+                $this->Message_AddNotice($this->Lang_Get('plugin.banneroid.banneroid_ok_add'), $this->Lang_Get('attention'), true);
+                Router::Location(Config::Get("path.root.web") . '/banneroid/');
             }
         }
         
@@ -180,7 +180,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
 
         if (getRequest('submit_banner')) {
             if ($this->PluginBanneroid_Banner_Save($oBanner)) {
-                $this->Message_AddNotice($this->Lang_Get('banneroid_ok_edit'), $this->Lang_Get('attention'), true);
+                $this->Message_AddNotice($this->Lang_Get('plugin.banneroid.banneroid_ok_edit'), $this->Lang_Get('attention'), true);
                 Router::Location(Config::Get("path.root.web") . '/banneroid/');
             }
         }
@@ -222,7 +222,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         $sBannerId = $this->GetParam(0);
 
         $this->PluginBanneroid_Banner_HideBanner($sBannerId);
-        $this->Message_AddNotice($this->Lang_Get('banneroid_ok_delete'), $this->Lang_Get('attention'), true);
+        $this->Message_AddNotice($this->Lang_Get('plugin.banneroid.banneroid_ok_delete'), $this->Lang_Get('attention'), true);
 
         Router::Location(Config::Get("path.root.web") . '/banneroid/');
     }

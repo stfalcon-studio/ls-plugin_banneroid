@@ -34,11 +34,11 @@ class PluginBanneroid_ModuleBanner extends Module {
      */
     public function Init() {
         $this->_oMapper = Engine::GetMapper(__CLASS__);
-        $this->_aPlaceNames[0] = $this->Lang_Get('banneroid_total');
-        $this->_aPlaceNames[1] = $this->Lang_Get('banneroid_under_article');
-        $this->_aPlaceNames[2] = $this->Lang_Get('banneroid_side_bar');
-        $this->_aPlaceNames[3] = $this->Lang_Get('banneroid_body_begin');
-        $this->_aPlaceNames[4] = $this->Lang_Get('banneroid_body_end');
+        $this->_aPlaceNames[0] = $this->Lang_Get('plugin.banneroid.banneroid_total');
+        $this->_aPlaceNames[1] = $this->Lang_Get('plugin.banneroid.banneroid_under_article');
+        $this->_aPlaceNames[2] = $this->Lang_Get('plugin.banneroid.banneroid_side_bar');
+        $this->_aPlaceNames[3] = $this->Lang_Get('plugin.banneroid.banneroid_body_begin');
+        $this->_aPlaceNames[4] = $this->Lang_Get('plugin.banneroid.banneroid_body_end');
         $this->aActivePlugins = $this->Plugin_GetActivePlugins();
     }
 
@@ -58,7 +58,7 @@ class PluginBanneroid_ModuleBanner extends Module {
                 $aPages = $this->_oMapper->GetBannerPagesNames($oBanner);
                 $sPages = '';
                 foreach ($aPages as $aRow) {
-                    $sPages.=" " . $this->Lang_Get($aRow['place_name']) . '(' .
+                    $sPages.=" " . $this->Lang_Get('plugin.banneroid.'.$aRow['place_name']) . '(' .
                             $this->_aPlaceNames[$aRow['place_type']] . ')';
                 }
                 $oBanner->setPagesNames($sPages);
@@ -307,30 +307,30 @@ class PluginBanneroid_ModuleBanner extends Module {
             $bStateError = 0;
             if (!preg_match(Config::Get('plugin.banneroid.banner_date_reg'), $sStartDate)) {
                 $this->Message_AddError(
-                        $this->Lang_Get("banneroid_error_date_start"),
-                        $this->Lang_Get('banneroid_error'));
+                        $this->Lang_Get("plugin.banneroid.banneroid_error_date_start"),
+                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
                 $bStateError = 1;
             }
 
             if (!preg_match(Config::Get('plugin.banneroid.banner_date_reg'), $sEndDate)) {
                 $this->Message_AddError(
-                        $this->Lang_Get("banneroid_error_date_end"),
-                        $this->Lang_Get('banneroid_error'));
+                        $this->Lang_Get("plugin.banneroid.banneroid_error_date_end"),
+                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
                 $bStateError = 1;
             }
 
 
             if (!func_check($_REQUEST['banner_name'], 'text', 2, 3000)) {
                 $this->Message_AddError(
-                        $this->Lang_Get("banneroid_error_name"),
-                        $this->Lang_Get('banneroid_error'));
+                        $this->Lang_Get("plugin.banneroid.banneroid_error_name"),
+                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
                 $bStateError = 1;
             }
 
             if (!preg_match(Config::Get('plugin.banneroid.banner_url_reg'), $_REQUEST['banner_url']) and !$_REQUEST['banner_html']) {
                 $this->Message_AddError(
-                        $this->Lang_Get("banneroid_error_url"),
-                        $this->Lang_Get('banneroid_error'));
+                        $this->Lang_Get("plugin.banneroid.banneroid_error_url"),
+                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
                 $bStateError = 1;
             }
             
@@ -343,8 +343,8 @@ class PluginBanneroid_ModuleBanner extends Module {
                     $aLangs = $this->PluginL10n_L10n_GetAllowedLangs();
                     if (!in_array($sLang, $aLangs)) {
                         $this->Message_AddError(
-                            $this->Lang_Get("banneroid_error_lang"),
-                            $this->Lang_Get('banneroid_error'));
+                            $this->Lang_Get("plugin.banneroid.banneroid_error_lang"),
+                            $this->Lang_Get('plugin.banneroid.banneroid_error'));
                         $bStateError = true;
                     }
                 }
@@ -376,15 +376,15 @@ class PluginBanneroid_ModuleBanner extends Module {
                 $aSize = @getimagesize($aImageFile["tmp_name"]);
                 if (!in_array($aSize['mime'], Config::Get('plugin.banneroid.images_mime'))) {
                     $this->Message_AddError(
-                            $this->Lang_Get("banneroid_error_image_extension"),
-                            $this->Lang_Get('banneroid_error'));
+                            $this->Lang_Get("plugin.banneroid.banneroid_error_image_extension"),
+                            $this->Lang_Get('plugin.banneroid.banneroid_error'));
                     $iOk = 0;
                 } else
 
                 if (!$this->UploadImage($aImageFile, $oBanner)) {
                     $this->Message_AddError(
-                            $this->Lang_Get("banneroid_error_unable_to_upload_image"),
-                            $this->Lang_Get('banneroid_error'));
+                            $this->Lang_Get("plugin.banneroid.banneroid_error_unable_to_upload_image"),
+                            $this->Lang_Get('plugin.banneroid.banneroid_error'));
                     $iOk = 0;
                 }
             }
@@ -399,8 +399,8 @@ class PluginBanneroid_ModuleBanner extends Module {
 
             if (!isset($iRes)) { //show error editiding banner
                 $this->Message_AddError(
-                        $this->Lang_Get("banneroid_error_edit"),
-                        $this->Lang_Get('banneroid_error'));
+                        $this->Lang_Get("plugin.banneroid.banneroid_error_edit"),
+                        $this->Lang_Get('plugin.banneroid.banneroid_error'));
                 return false;
             } elseif(is_array(getRequest('banner_place')) && count(getRequest('banner_place'))) {
                 // Add banner pages --------------
