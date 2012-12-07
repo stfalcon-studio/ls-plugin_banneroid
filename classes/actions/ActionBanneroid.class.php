@@ -137,7 +137,7 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         if (getRequest('submit_banner')) {
             if ($this->PluginBanneroid_Banner_Save($oBanner)) {
                 $this->Message_AddNotice($this->Lang_Get('banneroid_ok_add'), $this->Lang_Get('attention'), true);
-                Router::Location('../edit/' . $oBanner->getId());
+                Router::Location(Config::Get("path.root.web") . '/banneroid/');
             }
         }
         
