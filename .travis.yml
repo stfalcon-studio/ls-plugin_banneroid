@@ -11,6 +11,7 @@ before_script:
   - cp -a /tmp/ls/* ./
   - cp /tmp/ls/.htaccess ./
   - mkdir -p plugins/banneroid && cp -a /tmp/plugins/banneroid/* plugins/banneroid
+  - mkdir -p uploads/banneroid
   - echo "banneroid" > ./plugins/plugins.dat
 
   # change application working folders for write access
