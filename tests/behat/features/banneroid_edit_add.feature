@@ -37,7 +37,7 @@ Feature: Banneroid plugin features add && edit banner
   @mink:selenium2
     Scenario: Create new banner
       Then check is plugin active "banneroid"
-      Given I load fixtures for plugin "banneroid"
+      Then I run after begin
       Given I am on homepage
 
       Then I want to login as "admin"
@@ -51,9 +51,15 @@ Feature: Banneroid plugin features add && edit banner
 
       When I check "banner_is_active"
       When I check "banner_place[]"
+      When I press element by css "input[value='4']"
 
       When I press element by css "input[name='submit_banner']"
       Then I wait "1000"
 
       Given I am on "/banneroid/"
       Then I should see "Add new banner GOOGLE"
+
+      Given I am on homepage
+      Then I should see in element by css "body" any of values:
+        | value |
+        | This is just created bunner |

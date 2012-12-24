@@ -94,4 +94,13 @@ class FeatureContext extends MinkContext
         }
     }
 
+    /**
+     * @Then /^I run after begin$/
+     */
+    public function iRunAfterBegin()
+    {
+        $sPath = dirname(realpath((dirname(__FILE__)) . "/../../")) . '/fixtures/page.sql';
+        $this->getEngine()->Database_ExportSQL($sPath);
+    }
+
 }
