@@ -90,7 +90,8 @@ class PluginBanneroid_ModuleBanner_MapperBanner extends Mapper {
                 GROUP BY
                         banner.banner_id
                 ORDER BY
-                        stats.view_count
+                        stats.view_count,
+                        banner.banner_id
                 LIMIT
                         1';
 

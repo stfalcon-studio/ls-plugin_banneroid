@@ -143,6 +143,9 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         
         if (in_array('l10n', $this->aActivePlugins)) {
             $aLangs = $this->PluginL10n_L10n_GetAllowedLangsToViewer();
+            foreach ($aLangs as $code => &$lang) {
+                $lang = $this->Lang_Get('plugin.l10n.' . $lang);
+            }
             $this->Viewer_Assign('aLangs', $aLangs);
         }
         
@@ -188,6 +191,9 @@ class PluginBanneroid_ActionBanneroid extends ActionPlugin
         
         if (in_array('l10n', $this->aActivePlugins)) {
             $aLangs = $this->PluginL10n_L10n_GetAllowedLangsToViewer();
+            foreach ($aLangs as $code => &$lang) {
+                $lang = $this->Lang_Get('plugin.l10n.' . $lang);
+            }
             $this->Viewer_Assign('aLangs', $aLangs);
         }
         
