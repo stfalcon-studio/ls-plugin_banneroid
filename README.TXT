@@ -23,4 +23,4 @@
 --------------
 
 v0.3.0
-- Добавлена поддержка LS 0.5.1
+- Добавлена поддержка LS 0.5.1 https://github.com/stfalcon-studio/ls-plugin_banneroid/archive/v0.3.0.zip
