@@ -29,9 +29,13 @@ Feature: Banneroid plugin features add && edit banner
       When I uncheck "banner_is_active"
 
       When I press element by css "input[name='submit_banner']"
+
       Then I wait "1000"
       Then I should see "Changed banner name"
       Then I should not see "На всех страницах(Сайд бар) Блоги(Сайд бар)"
+
+      Given I am on homepage
+      Then I should not see "http://livestreet.test/uploads/banneroid/livestreet_logo.jpeg"
 
 
   @mink:selenium2
@@ -63,3 +67,17 @@ Feature: Banneroid plugin features add && edit banner
       Then I should see in element by css "body" any of values:
         | value |
         | This is just created bunner |
+
+  @mink:selenium2
+    Scenario: View banner on topic page
+      Then check is plugin active "banneroid"
+      Given I load fixtures for plugin "banneroid"
+
+      Given I am on "/blog/3.html"
+
+      Then the response should contain "Web development"
+
+      Given I am on "/blog/3.html"
+      Given I am on "/blog/3.html"
+
+      Then the response should contain "http://livestreet.test/uploads/banneroid/ZF2.jpeg"
