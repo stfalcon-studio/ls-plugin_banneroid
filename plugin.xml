@@ -4,25 +4,16 @@
         <lang name="default">Banneriod</lang>
     </name>
     <author>
-        <lang name="default">stfalcon-studio</lang>
+        <lang name="default">Web studio stfalcon.com</lang>
     </author>
     <homepage>http://stfalcon.com</homepage>
     <version>0.4.0</version>
     <requires>
-        <livestreet>1.0.1</livestreet>
-        <plugins>
-        </plugins>
+        <livestreet>1.0</livestreet>
     </requires>
     <description>
         <lang name="default">Baner rotator for LS</lang>
-        <lang name="russian">Прокрутка банеров для ЛС</lang>
-        <lang name="ukrainian">Прокрутка банерів для ЛС</lang>
+        <lang name="russian">Плагин для удобного размещения и управлениями баннерами</lang>
+        <lang name="ukrainian">Плагін для зручного розміщення і керування банерами</lang>
     </description>
-    <delegate>
-        <module></module>
-        <action></action>
-        <template></template>
-        <entity></entity>
-    </delegate>
 </plugin>
-

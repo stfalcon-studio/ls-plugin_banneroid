@@ -1,7 +1,9 @@
+[![Build Status](https://travis-ci.org/stfalcon-studio/ls-plugin_banneroid.png?branch=master)](https://travis-ci.org/stfalcon-studio/ls-plugin_banneroid)
+
 ОПИСАНИЕ
 --------
 
-Плагин Banneroid позволяет размещать баннеры на своем сайте.
+Плагин для удобного размещения и управлениями баннерами на LiveStreet сайтах.
 
 Возможности плагина:
 * Добавление/редактирование/удаление баннеров.
@@ -22,5 +24,15 @@
 ИСТОРИЯ ВЕРСИЙ
 --------------
 
+v0.4.0
+- Плагин адаптирован для работы с LiveStreet v1.0
+- Добавлены тестовые сценарии и конфиг для Travis CI
+
 v0.3.0
-- Добавлена поддержка LS 0.5.1 https://github.com/stfalcon-studio/ls-plugin_banneroid/archive/v0.3.0.zip
+- Добавлена поддержка LiveStreet v0.5.1. Это последняя версия, которая работает с LiveStreet v0.5.1. Скачать её можно по ссылке https://github.com/stfalcon-studio/ls-plugin_banneroid/archive/v0.3.0.zip
+
+v0.2.0
+- Добавлена поддержка плагина l10n
+
+v0.1.0
+- Релиз плагина (анонс http://livestreet.ru/blog/addons/6625.html)
